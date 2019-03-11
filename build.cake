@@ -9,10 +9,10 @@ var nugetApiKey = Argument("nugetApiKey", "");
 var trigger = Argument("trigger", "");
 var versionSuffix = Argument("versionSuffix", "");
 
-var solutionFileName = "ProjectName.sln";
-var docsProjects = new[] { "ProjectName" };
-var docsRepoUri = "https://github.com/Faithlife/RepoName.git";
-var docsSourceUri = "https://github.com/Faithlife/RepoName/tree/master/src";
+var solutionFileName = "Faithlife.Reflection.sln";
+var docsProjects = new[] { "Faithlife.Reflection" };
+var docsRepoUri = "https://github.com/Faithlife/FaithlifeReflection.git";
+var docsSourceUri = "https://github.com/Faithlife/FaithlifeReflection/tree/master/src";
 var nugetIgnore = new string[0];
 
 var nugetSource = "https://api.nuget.org/v3/index.json";

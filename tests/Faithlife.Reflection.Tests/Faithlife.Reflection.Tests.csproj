@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ProjectName\ProjectName.csproj" />
+    <ProjectReference Include="..\..\src\Faithlife.Reflection\Faithlife.Reflection.csproj" />
   </ItemGroup>
 
 </Project>
