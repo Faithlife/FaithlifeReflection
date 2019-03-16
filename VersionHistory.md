@@ -11,4 +11,4 @@ Prefix the description of the change with `[major]`, `[minor]` or `[patch]` in a
 
 ### 0.1.0
 
-* Initial release.
+* Add `TupleInfo` for using reflection with tuples.
