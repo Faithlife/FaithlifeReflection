@@ -1,6 +1,6 @@
-# Faithlife.Reflection
+# FaithlifeReflection
 
-Description
+Helpers for reflecting over .NET types.
 
 ## Build Status
 
