@@ -1,4 +1,4 @@
-# Contributing to Faithlife.Reflection
+# Contributing to FaithlifeReflection
 
 ## Prerequisites
 
@@ -13,6 +13,6 @@
 
 ## How to Build
 
-* Clone the repository: `git clone https://github.com/Faithlife/FaithlifeReflection.git`
+* `git clone https://github.com/Faithlife/FaithlifeReflection.git`
 * `cd FaithlifeReflection`
 * `dotnet test`
