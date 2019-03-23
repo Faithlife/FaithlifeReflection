@@ -8,6 +8,10 @@ Prefix the description of the change with `[major]`, `[minor]` or `[patch]` in a
 
 ## Released
 
+### 0.2.0
+
+* Add `DtoInfo` for using reflection with DTOs.
+
 ### 0.1.0
 
 * Add `TupleInfo` for using reflection with tuples.

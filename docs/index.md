@@ -6,6 +6,7 @@
 
 ## Features
 
-* [tuples](Faithlife.Reflection/TupleInfo.html): get item types, create from items
+* [`DtoInfo`](Faithlife.Reflection/DtoInfo.html): create DTOs, clone DTOs, get/set properties and fields
+* [`TupleInfo`](Faithlife.Reflection/TupleInfo.html): get tuple item types, create tuples from items
 
 Consult the [reference documentation](Faithlife.Reflection.md) for details.
