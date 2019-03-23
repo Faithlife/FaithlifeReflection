@@ -1,6 +1,6 @@
 # TupleInfo&lt;T&gt; class
 
-Strongly-typed information about a tuple type.
+Information about a tuple type.
 
 ```csharp
 public sealed class TupleInfo<T> : ITupleInfo

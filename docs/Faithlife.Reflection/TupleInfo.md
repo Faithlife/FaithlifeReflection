@@ -11,7 +11,7 @@ public static class TupleInfo
 | name | description |
 | --- | --- |
 | static [GetInfo](TupleInfo/GetInfo.md)(…) | Gets weakly-typed information for the specified tuple type. |
-| static [GetInfo&lt;T&gt;](TupleInfo/GetInfo.md)() | Gets strongly-typed information for the specified tuple type. |
+| static [GetInfo&lt;T&gt;](TupleInfo/GetInfo.md)() | Gets information for the specified tuple type. |
 | static [IsTuple](TupleInfo/IsTuple.md)(…) | True if the specified object is a supported tuple. |
 | static [IsTupleType](TupleInfo/IsTupleType.md)(…) | True if the specified type is a supported tuple type. |
 

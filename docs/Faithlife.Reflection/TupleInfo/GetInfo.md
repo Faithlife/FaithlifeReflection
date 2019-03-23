@@ -20,7 +20,7 @@ public static ITupleInfo GetInfo(Type type)
 
 # TupleInfo.GetInfo&lt;T&gt; method (2 of 2)
 
-Gets strongly-typed information for the specified tuple type.
+Gets information for the specified tuple type.
 
 ```csharp
 public static TupleInfo<T> GetInfo<T>()
