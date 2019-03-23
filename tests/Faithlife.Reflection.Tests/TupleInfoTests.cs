@@ -128,10 +128,21 @@ namespace Faithlife.Reflection.Tests
 		public void IsTupleType()
 		{
 			TupleInfo.IsTupleType(typeof(object)).Should().BeFalse();
+			TupleInfo.IsTupleType(typeof(string)).Should().BeFalse();
 			TupleInfo.IsTupleType(typeof(ValueTuple<bool>)).Should().BeTrue();
 			TupleInfo.IsTupleType(typeof(ValueTuple)).Should().BeTrue();
 			TupleInfo.IsTupleType(typeof(Tuple<bool>)).Should().BeTrue();
 			TupleInfo.IsTupleType(typeof(Tuple)).Should().BeFalse();
+		}
+
+		[Test]
+		public void IsTuple()
+		{
+			TupleInfo.IsTuple(null).Should().BeFalse();
+			TupleInfo.IsTuple("ValueTuple").Should().BeFalse();
+			TupleInfo.IsTuple(ValueTuple.Create(true)).Should().BeTrue();
+			TupleInfo.IsTuple(default(ValueTuple)).Should().BeTrue();
+			TupleInfo.IsTuple(Tuple.Create(true)).Should().BeTrue();
 		}
 	}
 }

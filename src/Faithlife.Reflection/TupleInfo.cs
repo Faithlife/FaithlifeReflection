@@ -27,6 +27,12 @@ namespace Faithlife.Reflection
 		public static ITupleInfo GetInfo(Type type) => s_infos.GetOrAdd(type, DoGetInfo);
 
 		/// <summary>
+		/// True if the specified object is a supported tuple.
+		/// </summary>
+		/// <param name="value">The possible tuple.</param>
+		public static bool IsTuple(object value) => value != null && IsTupleType(value.GetType());
+
+		/// <summary>
 		/// True if the specified type is a supported tuple type.
 		/// </summary>
 		/// <param name="type">The possible tuple type.</param>
