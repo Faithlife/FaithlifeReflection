@@ -94,7 +94,7 @@ namespace Faithlife.Reflection
 			var type = typeof(T);
 			int itemCount = ItemTypes.Count;
 			if (itemCount == 0)
-				return items => (T) (object) ValueTuple.Create();
+				return items => default;
 
 			int genericTypeCount = Math.Min(8, itemCount);
 			var constructor = type.GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == genericTypeCount);
