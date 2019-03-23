@@ -2,22 +2,47 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-#pragma warning disable 1591
-
 namespace Faithlife.Reflection
 {
+	/// <summary>
+	/// Represents a property or field of a DTO.
+	/// </summary>
+	/// <typeparam name="TSource">The type of DTO.</typeparam>
+	/// <typeparam name="TValue">The value type of the property or field.</typeparam>
 	public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>, IDtoProperty
 	{
+		/// <summary>
+		/// The name of the property or field.
+		/// </summary>
 		public string Name { get; }
 
+		/// <summary>
+		/// The value type of the property or field.
+		/// </summary>
 		public Type ValueType { get; }
 
+		/// <summary>
+		/// True if the property or field is read-only.
+		/// </summary>
 		public bool IsReadOnly { get; }
 
+		/// <summary>
+		/// The <see cref="PropertyInfo"/> or <see cref="FieldInfo"/> of the property or field.
+		/// </summary>
 		public MemberInfo MemberInfo { get; }
 
+		/// <summary>
+		/// Gets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <param name="source">The DTO instance.</param>
 		public TValue GetValue(TSource source) => m_lazyGetter.Value(source);
 
+		/// <summary>
+		/// Sets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <param name="source">The DTO instance.</param>
+		/// <param name="value">The value to which to set the property or field.</param>
+		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
 		public void SetValue(TSource source, TValue value)
 		{
 			if (IsReadOnly)
@@ -25,12 +50,28 @@ namespace Faithlife.Reflection
 			m_lazySetter.Value(source, value);
 		}
 
+		/// <summary>
+		/// Gets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <remarks>See <see cref="GetValue"/>.</remarks>
 		object IDtoProperty.GetValue(object source) => GetValue((TSource) source);
 
+		/// <summary>
+		/// Sets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <remarks>See <see cref="SetValue"/>.</remarks>
 		void IDtoProperty.SetValue(object source, object value) => SetValue((TSource) source, (TValue) value);
 
+		/// <summary>
+		/// Gets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <remarks>See <see cref="GetValue"/>.</remarks>
 		object IDtoProperty<TSource>.GetValue(TSource source) => GetValue(source);
 
+		/// <summary>
+		/// Sets the value of the property or field for the specified instance of the DTO.
+		/// </summary>
+		/// <remarks>See <see cref="SetValue"/>.</remarks>
 		void IDtoProperty<TSource>.SetValue(TSource source, object value) => SetValue(source, (TValue) value);
 
 		internal DtoProperty(PropertyInfo propertyInfo)

@@ -15,7 +15,7 @@ namespace Faithlife.Reflection
 	public static class TupleInfo
 	{
 		/// <summary>
-		/// Gets strongly-typed information for the specified tuple type.
+		/// Gets information for the specified tuple type.
 		/// </summary>
 		/// <typeparam name="T">The tuple type.</typeparam>
 		public static TupleInfo<T> GetInfo<T>() => TupleInfo<T>.Instance.Value;
@@ -64,7 +64,7 @@ namespace Faithlife.Reflection
 	}
 
 	/// <summary>
-	/// Strongly-typed information about a tuple type.
+	/// Information about a tuple type.
 	/// </summary>
 	public sealed class TupleInfo<T> : ITupleInfo
 	{
