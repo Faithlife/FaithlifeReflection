@@ -36,6 +36,21 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		public void OnePropertyWeakInfoTests()
+		{
+			IDtoInfo info = DtoInfo.GetInfo(typeof(OneProperty));
+			info.Properties.Count.Should().Be(1);
+			info.CreateNew().GetType().Should().Be(typeof(OneProperty));
+			info.ShallowClone(null).Should().BeNull();
+
+			OneProperty dto = new OneProperty { Integer = 42 };
+			((OneProperty) info.ShallowClone(dto)).Integer.Should().Be(dto.Integer);
+
+			info.GetProperty("Integer").Name.Should().Be("Integer");
+			info.TryGetProperty("Integer").Name.Should().Be("Integer");
+		}
+
+		[Test]
 		public void OnePropertyStrongPropertyTests()
 		{
 			DtoInfo<OneProperty> info = DtoInfo.GetInfo<OneProperty>();

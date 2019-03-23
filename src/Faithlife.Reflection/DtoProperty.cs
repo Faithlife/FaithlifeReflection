@@ -9,7 +9,7 @@ namespace Faithlife.Reflection
 	/// </summary>
 	/// <typeparam name="TSource">The type of DTO.</typeparam>
 	/// <typeparam name="TValue">The value type of the property or field.</typeparam>
-	public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>, IDtoProperty
+	public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 	{
 		/// <summary>
 		/// The name of the property or field.

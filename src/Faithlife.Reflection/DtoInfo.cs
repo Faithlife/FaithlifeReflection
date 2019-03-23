@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace Faithlife.Reflection
 {
@@ -20,13 +22,35 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <typeparam name="T">The DTO type.</typeparam>
 		public static DtoInfo<T> GetInfo<T>() => DtoInfo<T>.Instance.Value;
+
+		/// <summary>
+		/// Gets weakly-typed information about the specified DTO type.
+		/// </summary>
+		/// <param name="type">The DTO type.</param>
+		public static IDtoInfo GetInfo(Type type) => s_infos.GetOrAdd(type, DoGetInfo);
+
+		private static IDtoInfo DoGetInfo(Type type)
+		{
+			try
+			{
+				return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, new object[0]);
+			}
+			catch (TargetInvocationException exception) when (exception.InnerException != null)
+			{
+				ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+				throw;
+			}
+		}
+
+		private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new ConcurrentDictionary<Type, IDtoInfo>();
+		private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", new Type[0]);
 	}
 
 	/// <summary>
 	/// Information about a DTO type.
 	/// </summary>
 	/// <typeparam name="T">The DTO type.</typeparam>
-	public sealed class DtoInfo<T>
+	public sealed class DtoInfo<T> : IDtoInfo
 	{
 		/// <summary>
 		/// The properties of the DTO.
@@ -96,6 +120,16 @@ namespace Faithlife.Reflection
 				property.SetValue(clone, property.GetValue(value));
 			return clone;
 		}
+
+		IReadOnlyList<IDtoProperty> IDtoInfo.Properties => Properties;
+
+		IDtoProperty IDtoInfo.GetProperty(string name) => GetProperty(name);
+
+		IDtoProperty IDtoInfo.TryGetProperty(string name) => TryGetProperty(name);
+
+		object IDtoInfo.CreateNew() => CreateNew();
+
+		object IDtoInfo.ShallowClone(object value) => ShallowClone((T) value);
 
 		internal DtoInfo()
 		{
