@@ -123,5 +123,15 @@ namespace Faithlife.Reflection.Tests
 			info.ItemTypes.Should().Equal(Enumerable.Repeat(typeof(int), 8));
 			info.CreateNew(new object[] { 1, 2, 3, 4, 5, 6, 7, 8 }).Should().Be(Tuple.Create(1, 2, 3, 4, 5, 6, 7, 8));
 		}
+
+		[Test]
+		public void IsTupleType()
+		{
+			TupleInfo.IsTupleType(typeof(object)).Should().BeFalse();
+			TupleInfo.IsTupleType(typeof(ValueTuple<bool>)).Should().BeTrue();
+			TupleInfo.IsTupleType(typeof(ValueTuple)).Should().BeTrue();
+			TupleInfo.IsTupleType(typeof(Tuple<bool>)).Should().BeTrue();
+			TupleInfo.IsTupleType(typeof(Tuple)).Should().BeFalse();
+		}
 	}
 }

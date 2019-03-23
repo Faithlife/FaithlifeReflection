@@ -26,6 +26,19 @@ namespace Faithlife.Reflection
 		/// <param name="type">The tuple type.</param>
 		public static ITupleInfo GetInfo(Type type) => s_infos.GetOrAdd(type, DoGetInfo);
 
+		/// <summary>
+		/// True if the specified type is a supported tuple type.
+		/// </summary>
+		/// <param name="type">The possible tuple type.</param>
+		public static bool IsTupleType(Type type)
+		{
+			string typeName = type.FullName;
+			return typeName != null &&
+				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
+				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
+				typeName == "System.ValueTuple");
+		}
+
 		private static ITupleInfo DoGetInfo(Type type)
 		{
 			try
@@ -70,14 +83,8 @@ namespace Faithlife.Reflection
 
 		internal TupleInfo()
 		{
-			string typeName = typeof(T).FullName;
-			if (typeName == null ||
-				!typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) &&
-				!typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) &&
-				typeName != "System.ValueTuple")
-			{
-				throw new InvalidOperationException($"Type is not a tuple: {typeName}");
-			}
+			if (!TupleInfo.IsTupleType(typeof(T)))
+				throw new InvalidOperationException($"Type is not a tuple: {typeof(T).FullName}");
 
 			var genericTypeArguments = typeof(T).GenericTypeArguments;
 			ItemTypes = genericTypeArguments.Length < 8 ?
