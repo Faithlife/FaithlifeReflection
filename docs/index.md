@@ -1,11 +1,11 @@
 # Faithlife.Reflection
 
-**Faithlife.Reflection** description
+**Faithlife.Reflection** provides helpers for reflecting over .NET types.
 
-## Installation
+[![NuGet](https://img.shields.io/nuget/v/Faithlife.Reflection.svg)](https://www.nuget.org/packages/Faithlife.Reflection)
 
-Install **Faithlife.Reflection** using NuGet. [![NuGet](https://img.shields.io/nuget/v/Faithlife.Reflection.svg)](https://www.nuget.org/packages/Faithlife.Reflection)
+## Features
 
-## Documentation
+* [tuples](Faithlife.Reflection/TupleInfo.html): get item types, create from items
 
-* [Reference Documentation](Faithlife.Reflection.md)
+Consult the [reference documentation](Faithlife.Reflection.md) for details.
