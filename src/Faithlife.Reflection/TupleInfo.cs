@@ -38,11 +38,12 @@ namespace Faithlife.Reflection
 		/// <param name="type">The possible tuple type.</param>
 		public static bool IsTupleType(Type type)
 		{
-			string typeName = type.FullName;
+			string typeName = type?.FullName;
 			return typeName != null &&
 				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
-				typeName == "System.ValueTuple");
+				typeName == "System.ValueTuple" ||
+				IsTupleType(Nullable.GetUnderlyingType(type)));
 		}
 
 		private static ITupleInfo DoGetInfo(Type type)
@@ -89,10 +90,11 @@ namespace Faithlife.Reflection
 
 		internal TupleInfo()
 		{
-			if (!TupleInfo.IsTupleType(typeof(T)))
-				throw new InvalidOperationException($"Type is not a tuple: {typeof(T).FullName}");
+			var type = typeof(T);
+			if (!TupleInfo.IsTupleType(type))
+				throw new InvalidOperationException($"Type is not a tuple: {type.FullName}");
 
-			var genericTypeArguments = typeof(T).GenericTypeArguments;
+			var genericTypeArguments = (Nullable.GetUnderlyingType(type) ?? type).GenericTypeArguments;
 			ItemTypes = genericTypeArguments.Length < 8 ?
 				new ReadOnlyCollection<Type>(genericTypeArguments) :
 				new ReadOnlyCollection<Type>(genericTypeArguments.Take(7).Concat(TupleInfo.GetInfo(genericTypeArguments[7]).ItemTypes).ToList());
@@ -104,7 +106,7 @@ namespace Faithlife.Reflection
 
 		private Func<IEnumerable<object>, T> GetCreator()
 		{
-			var type = typeof(T);
+			var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 			int itemCount = ItemTypes.Count;
 			if (itemCount == 0)
 				return items => default;

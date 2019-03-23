@@ -63,6 +63,15 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		public void NullableTwoValueTupleTests()
+		{
+			var info = TupleInfo.GetInfo<(int, string)?>();
+			info.TupleType.Should().Be(typeof((int, string)?));
+			info.ItemTypes.Should().Equal(typeof(int), typeof(string));
+			info.CreateNew(new object[] { 1, "one" }).Should().Be((1, "one"));
+		}
+
+		[Test]
 		public void CreateNewValueTupleBadItemType()
 		{
 			Invoking(() => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1, 2 }))
@@ -136,6 +145,13 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		public void IsNullableValueTupleType()
+		{
+			TupleInfo.IsTupleType(typeof(ValueTuple<bool>?)).Should().BeTrue();
+			TupleInfo.IsTupleType(typeof(ValueTuple?)).Should().BeTrue();
+		}
+
+		[Test]
 		public void IsTuple()
 		{
 			TupleInfo.IsTuple(null).Should().BeFalse();
@@ -143,6 +159,7 @@ namespace Faithlife.Reflection.Tests
 			TupleInfo.IsTuple(ValueTuple.Create(true)).Should().BeTrue();
 			TupleInfo.IsTuple(default(ValueTuple)).Should().BeTrue();
 			TupleInfo.IsTuple(Tuple.Create(true)).Should().BeTrue();
+			TupleInfo.IsTuple(default(ValueTuple?)).Should().BeFalse();
 		}
 
 		private static Action Invoking(Action action) => action;
