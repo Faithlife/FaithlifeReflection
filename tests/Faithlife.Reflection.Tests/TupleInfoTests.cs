@@ -65,36 +65,36 @@ namespace Faithlife.Reflection.Tests
 		[Test]
 		public void CreateNewValueTupleBadItemType()
 		{
-			Action action = () => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1, 2 });
-			action.Should().Throw<ArgumentException>();
+			Invoking(() => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1, 2 }))
+				.Should().Throw<ArgumentException>();
 		}
 
 		[Test]
 		public void CreateNewValueTupleTooFewItems()
 		{
-			Action action = () => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1 });
-			action.Should().Throw<ArgumentException>();
+			Invoking(() => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1 }))
+				.Should().Throw<ArgumentException>();
 		}
 
 		[Test]
 		public void CreateNewValueTupleTooManyItems()
 		{
-			Action action = () => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1, "one", true });
-			action.Should().Throw<ArgumentException>();
+			Invoking(() => TupleInfo.GetInfo<(int, string)>().CreateNew(new object[] { 1, "one", true }))
+				.Should().Throw<ArgumentException>();
 		}
 
 		[Test]
 		public void StrongNonTupleType()
 		{
-			Func<TupleInfo<int>> action = () => TupleInfo.GetInfo<int>();
-			action.Should().Throw<InvalidOperationException>();
+			Invoking(() => TupleInfo.GetInfo<int>())
+				.Should().Throw<InvalidOperationException>();
 		}
 
 		[Test]
 		public void WeakNonTupleType()
 		{
-			Func<ITupleInfo> action = () => TupleInfo.GetInfo(typeof(int));
-			action.Should().Throw<InvalidOperationException>();
+			Invoking(() => TupleInfo.GetInfo(typeof(int)))
+				.Should().Throw<InvalidOperationException>();
 		}
 
 		[Test]
@@ -144,5 +144,7 @@ namespace Faithlife.Reflection.Tests
 			TupleInfo.IsTuple(default(ValueTuple)).Should().BeTrue();
 			TupleInfo.IsTuple(Tuple.Create(true)).Should().BeTrue();
 		}
+
+		private static Action Invoking(Action action) => action;
 	}
 }
