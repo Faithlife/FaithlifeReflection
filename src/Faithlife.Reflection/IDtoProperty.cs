@@ -6,6 +6,8 @@ namespace Faithlife.Reflection
 	/// <summary>
 	/// Represents a property or field of a DTO.
 	/// </summary>
+	/// <remarks>Do not implement this interface. Adding members to this interface will
+	/// not be considered a breaking change to this library.</remarks>
 	public interface IDtoProperty
 	{
 		/// <summary>
@@ -47,6 +49,8 @@ namespace Faithlife.Reflection
 	/// Represents a property or field of a DTO.
 	/// </summary>
 	/// <typeparam name="T">The type of DTO.</typeparam>
+	/// <remarks>Do not implement this interface. Adding members to this interface will
+	/// not be considered a breaking change to this library.</remarks>
 	public interface IDtoProperty<in T> : IDtoProperty
 	{
 		/// <summary>
