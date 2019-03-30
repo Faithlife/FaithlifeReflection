@@ -191,6 +191,29 @@ namespace Faithlife.Reflection.Tests
 			Invoking(() => field.SetValue(dto, 24)).Should().Throw<InvalidOperationException>();
 		}
 
+		[Test]
+		public void StrongAnonymousType()
+		{
+			DtoInfo<T> getInfo<T>(T _) => DtoInfo.GetInfo<T>();
+			var obj = new { Integer = 3, String = "three" };
+			var info = getInfo(obj);
+			info.Properties.Should().HaveCount(2);
+			var property = info.GetProperty("Integer");
+			property.IsReadOnly.Should().BeTrue();
+			property.GetValue(obj).Should().Be(3);
+		}
+
+		[Test]
+		public void WeakAnonymousType()
+		{
+			var obj = new { Integer = 3, String = "three" };
+			var info = DtoInfo.GetInfo(obj.GetType());
+			info.Properties.Should().HaveCount(2);
+			var property = info.GetProperty("Integer");
+			property.IsReadOnly.Should().BeTrue();
+			property.GetValue(obj).Should().Be(3);
+		}
+
 		private sealed class EmptyDto
 		{
 		}
