@@ -4,6 +4,8 @@ using System.Reflection;
 using FluentAssertions;
 using NUnit.Framework;
 
+#pragma warning disable 414, 649
+
 namespace Faithlife.Reflection.Tests
 {
 	[TestFixture]
@@ -200,9 +202,7 @@ namespace Faithlife.Reflection.Tests
 
 		private sealed class OneField
 		{
-#pragma warning disable 649
 			public int Integer;
-#pragma warning restore 649
 		}
 
 		private class TwoReadOnly
@@ -215,9 +215,7 @@ namespace Faithlife.Reflection.Tests
 
 			public int IntegerProperty { get; }
 
-#pragma warning disable 414
 			public readonly int IntegerField;
-#pragma warning restore 414
 
 			public int WriteOnlyProperty { set { } }
 
@@ -225,15 +223,11 @@ namespace Faithlife.Reflection.Tests
 
 			public const int ConstIntegerField = 4;
 
-#pragma warning disable 414
 			public static readonly int StaticIntegerField = 5;
-#pragma warning restore 414
 
 			protected int ProtectedProperty { get; } = 6;
 
-#pragma warning disable 414
 			readonly int m_privateField = 7;
-#pragma warning restore 414
 		}
 
 		private static Action Invoking(Action action) => action;
