@@ -17,6 +17,10 @@ public interface IDtoProperty
 | [GetValue](IDtoProperty/GetValue.md)(…) | Gets the value of the property or field for the specified instance of the DTO. |
 | [SetValue](IDtoProperty/SetValue.md)(…) | Sets the value of the property or field for the specified instance of the DTO. |
 
+## Remarks
+
+Do not implement this interface. Adding members to this interface will not be considered a breaking change to this library.
+
 ## See Also
 
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)

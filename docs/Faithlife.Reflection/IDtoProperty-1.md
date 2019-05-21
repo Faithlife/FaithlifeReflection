@@ -17,6 +17,10 @@ public interface IDtoProperty<in T> : IDtoProperty
 | [GetValue](IDtoProperty-1/GetValue.md)(…) | Gets the value of the property or field for the specified instance of the DTO. |
 | [SetValue](IDtoProperty-1/SetValue.md)(…) | Sets the value of the property or field for the specified instance of the DTO. |
 
+## Remarks
+
+Do not implement this interface. Adding members to this interface will not be considered a breaking change to this library.
+
 ## See Also
 
 * interface [IDtoProperty](IDtoProperty.md)

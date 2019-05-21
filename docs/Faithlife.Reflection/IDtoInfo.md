@@ -16,6 +16,10 @@ public interface IDtoInfo
 | [ShallowClone](IDtoInfo/ShallowClone.md)(…) | Clones the specified DTO by copying each property into a new instance. |
 | [TryGetProperty](IDtoInfo/TryGetProperty.md)(…) | Returns the property of the specified name. |
 
+## Remarks
+
+Do not implement this interface. Adding members to this interface will not be considered a breaking change to this library.
+
 ## See Also
 
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)
