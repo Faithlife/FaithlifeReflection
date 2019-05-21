@@ -8,6 +8,10 @@ Prefix the description of the change with `[major]`, `[minor]`, or `[patch]` in 
 
 ## Released
 
+### 0.2.1
+
+* Update docs, build script.
+
 ### 0.2.0
 
 * Add `DtoInfo` for using reflection with DTOs.

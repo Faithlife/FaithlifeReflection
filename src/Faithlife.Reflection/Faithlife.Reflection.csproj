@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.2.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Description>Helpers for reflecting over .NET types.</Description>
     <PackageTags>dotnet reflection</PackageTags>
