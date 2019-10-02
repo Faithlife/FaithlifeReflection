@@ -74,6 +74,7 @@ namespace Faithlife.Reflection
 		/// <remarks>See <see cref="SetValue"/>.</remarks>
 		void IDtoProperty<TSource>.SetValue(TSource source, object value) => SetValue(source, (TValue) value);
 
+		// called by DtoInfo.CreateDtoProperty via reflection
 		internal DtoProperty(PropertyInfo propertyInfo)
 		{
 			Name = propertyInfo.Name;
@@ -84,6 +85,7 @@ namespace Faithlife.Reflection
 			m_lazySetter = new Lazy<Action<TSource, TValue>>(GeneratePropertySetter);
 		}
 
+		// called by DtoInfo.CreateDtoProperty via reflection
 		internal DtoProperty(FieldInfo fieldInfo)
 		{
 			Name = fieldInfo.Name;
