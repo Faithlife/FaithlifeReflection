@@ -16,7 +16,7 @@ Consult the [reference documentation](Faithlife.Reflection.md) for specific deta
 
 A DTO (data transfer object) typically has one or more read/write properties and a default constructor.
 
-The [`DtoInfo`](Faithlife.Reflection/DtoInfo.html) static class makes it easy to:
+The [`DtoInfo`](Faithlife.Reflection/DtoInfo.md) static class makes it easy to:
 
 * enumerate the public non-static properties and fields of a DTO type, both read/write and read-only
 * get the name, type, and other metadata for each property/field of the DTO type
@@ -30,7 +30,7 @@ Anonymous types and other read-only DTO types also work well with this class lib
 
 C# 7 introduced syntax for tuples, which use the `System.ValueTuple<...>` types. Before that, the `System.Tuple<...>` types were commonly used. This library supports both kinds of tuples.
 
-The [`TupleInfo`](Faithlife.Reflection/TupleInfo.html) static class makes it easy to:
+The [`TupleInfo`](Faithlife.Reflection/TupleInfo.md) static class makes it easy to:
 
 * determine if a type is a tuple type
 * enumerate the types of the tuple items (even for tuples with more than seven items)
