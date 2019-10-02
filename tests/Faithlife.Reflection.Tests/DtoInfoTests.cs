@@ -18,7 +18,6 @@ namespace Faithlife.Reflection.Tests
 			DtoInfo<EmptyDto> info = DtoInfo.GetInfo<EmptyDto>();
 			info.Properties.Should().BeEmpty();
 			info.CreateNew().GetType().Should().Be(typeof(EmptyDto));
-			info.ShallowClone(null).Should().BeNull();
 			info.ShallowClone(new EmptyDto()).Should().NotBeNull();
 			Invoking(() => info.GetProperty("Nope")).Should().Throw<ArgumentException>();
 			info.TryGetProperty("Nope").Should().BeNull();
@@ -27,12 +26,18 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		public void ShallowCloneThrowsOnNull()
+		{
+			DtoInfo<EmptyDto> info = DtoInfo.GetInfo<EmptyDto>();
+			Invoking(() => info.ShallowClone(null!)).Should().Throw<ArgumentNullException>();
+		}
+
+		[Test]
 		public void OnePropertyInfoTests()
 		{
 			DtoInfo<OneProperty> info = DtoInfo.GetInfo<OneProperty>();
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneProperty));
-			info.ShallowClone(null).Should().BeNull();
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);
@@ -44,13 +49,12 @@ namespace Faithlife.Reflection.Tests
 			IDtoInfo info = DtoInfo.GetInfo(typeof(OneProperty));
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneProperty));
-			info.ShallowClone(null).Should().BeNull();
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			((OneProperty) info.ShallowClone(dto)).Integer.Should().Be(dto.Integer);
 
 			info.GetProperty("Integer").Name.Should().Be("Integer");
-			info.TryGetProperty("Integer").Name.Should().Be("Integer");
+			info.TryGetProperty("Integer")!.Name.Should().Be("Integer");
 		}
 
 		[Test]
@@ -108,7 +112,6 @@ namespace Faithlife.Reflection.Tests
 			DtoInfo<OneField> info = DtoInfo.GetInfo<OneField>();
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneField));
-			info.ShallowClone(null).Should().BeNull();
 
 			OneField dto = new OneField { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);

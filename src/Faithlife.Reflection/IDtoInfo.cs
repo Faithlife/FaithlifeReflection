@@ -28,7 +28,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="name">The property name.</param>
 		/// <returns>Returns <c>null</c> if the property does not exist.</returns>
-		IDtoProperty TryGetProperty(string name);
+		IDtoProperty? TryGetProperty(string name);
 
 		/// <summary>
 		/// Creates a new instance of the DTO.
