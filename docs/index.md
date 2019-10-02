@@ -26,6 +26,51 @@ The [`DtoInfo`](Faithlife.Reflection/DtoInfo.md) static class makes it easy to:
 
 Anonymous types and other read-only DTO types also work well with this class library for enumerating and getting property values, but setting property values, creating new instances, etc., will fail at runtime.
 
+### Accessing info
+
+The easiest way to access the DTO info is to call [`DtoInfo.GetInfo`](Faithlife.Reflection/DtoInfo/GetInfo.md) with the `Type` of the DTO.
+
+```csharp
+int GetPropertyCount(object dto)
+{
+    IDtoInfo info = DtoInfo.GetInfo(dto.GetType());
+    return info.Properties.Count;
+}
+```
+
+If possible, use the generic overload of `DtoInfo.GetInfo`, which is slightly more efficient and supports stronger types.
+
+```csharp
+int GetPropertyCount<T>()
+{
+    DtoInfo<T> info = DtoInfo.GetInfo<T>();
+    return info.Properties.Count;
+}
+```
+
+### Getting properties
+
+This method creates a dictionary of property names and values from an arbitrary DTO instance:
+
+```csharp
+IReadOnlyDictionary<string, object> ConvertDtoToDictionary(object dto) =>
+    DtoInfo.GetInfo(dto.GetType()).Properties.ToDictionary(x => x.Name, x => x.GetValue(dto));
+```
+
+### Setting properties
+
+This method creates a new instance of the specified type and sets its `Id` property to the specified string:
+
+```csharp
+T CreateWithId<T>(string id)
+{
+    var info = DtoInfo.GetInfo<T>();
+    var dto = info.CreateNew();
+    info.GetProperty<string>("Id").SetValue(dto, id);
+    return dto;
+}
+```
+
 ## Tuples
 
 C# 7 introduced syntax for tuples, which use the `System.ValueTuple<...>` types. Before that, the `System.Tuple<...>` types were commonly used. This library supports both kinds of tuples.
