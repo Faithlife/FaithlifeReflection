@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using NUnit.Framework;
+using static FluentAssertions.FluentActions;
 
 #pragma warning disable 414, 649
 
@@ -252,7 +253,5 @@ namespace Faithlife.Reflection.Tests
 
 			readonly int m_privateField = 7;
 		}
-
-		private static Action Invoking(Action action) => action;
 	}
 }

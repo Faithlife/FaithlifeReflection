@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using static FluentAssertions.FluentActions;
 
 namespace Faithlife.Reflection.Tests
 {
@@ -161,7 +162,5 @@ namespace Faithlife.Reflection.Tests
 			TupleInfo.IsTuple(Tuple.Create(true)).Should().BeTrue();
 			TupleInfo.IsTuple(default(ValueTuple?)).Should().BeFalse();
 		}
-
-		private static Action Invoking(Action action) => action;
 	}
 }
