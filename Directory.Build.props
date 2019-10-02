@@ -1,8 +1,8 @@
-﻿<Project>
+<Project>
 
   <PropertyGroup>
     <VersionPrefix>0.2.1</VersionPrefix>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>portable</DebugType>
     <DebugSymbols>True</DebugSymbols>
