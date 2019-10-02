@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -71,7 +72,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="name">The property name.</param>
 		/// <returns>Returns <c>null</c> if the property does not exist.</returns>
-		public IDtoProperty<T> TryGetProperty(string name) =>
+		public IDtoProperty<T>? TryGetProperty(string name) =>
 			m_lazyPropertiesByName.Value.TryGetValue(name, out var property) ? property : null;
 
 		/// <summary>
@@ -96,13 +97,14 @@ namespace Faithlife.Reflection
 		/// <typeparam name="TValue">The value type of the property.</typeparam>
 		/// <param name="name">The property name.</param>
 		/// <returns>Returns <c>null</c> if the property does not exist.</returns>
-		public DtoProperty<T, TValue> TryGetProperty<TValue>(string name) =>
+		public DtoProperty<T, TValue>? TryGetProperty<TValue>(string name) =>
 			m_lazyPropertiesByName.Value.TryGetValue(name, out var property) ? property as DtoProperty<T, TValue> : null;
 
 		/// <summary>
 		/// Creates a new instance of the DTO.
 		/// </summary>
 		/// <remarks>The DTO must have a public default constructor.</remarks>
+		[return: NotNull]
 		public T CreateNew() => m_lazyCreateNew.Value();
 
 		/// <summary>
@@ -110,10 +112,11 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="value">The instance to clone.</param>
 		/// <remarks>The DTO must have a public default constructor, and all properties must be read/write.</remarks>
+		[return: NotNull]
 		public T ShallowClone(T value)
 		{
 			if (value == null)
-				return default;
+				throw new ArgumentNullException(nameof(value));
 
 			T clone = CreateNew();
 			foreach (var property in Properties)
@@ -125,7 +128,7 @@ namespace Faithlife.Reflection
 
 		IDtoProperty IDtoInfo.GetProperty(string name) => GetProperty(name);
 
-		IDtoProperty IDtoInfo.TryGetProperty(string name) => TryGetProperty(name);
+		IDtoProperty? IDtoInfo.TryGetProperty(string name) => TryGetProperty(name);
 
 		object IDtoInfo.CreateNew() => CreateNew();
 

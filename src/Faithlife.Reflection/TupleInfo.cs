@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -30,7 +31,7 @@ namespace Faithlife.Reflection
 		/// True if the specified object is a supported tuple.
 		/// </summary>
 		/// <param name="value">The possible tuple.</param>
-		public static bool IsTuple(object value) => value != null && IsTupleType(value.GetType());
+		public static bool IsTuple(object? value) => value != null && IsTupleType(value.GetType());
 
 		/// <summary>
 		/// True if the specified type is a supported tuple type.
@@ -38,7 +39,7 @@ namespace Faithlife.Reflection
 		/// <param name="type">The possible tuple type.</param>
 		public static bool IsTupleType(Type type)
 		{
-			string typeName = type?.FullName;
+			string? typeName = type?.FullName;
 			return typeName != null &&
 				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
@@ -81,6 +82,7 @@ namespace Faithlife.Reflection
 		/// <summary>
 		/// Creates a tuple from the specified items.
 		/// </summary>
+		[return: NotNull]
 		public T CreateNew(IEnumerable<object> items) => m_lazyCreator.Value(items);
 
 		/// <summary>
@@ -109,7 +111,7 @@ namespace Faithlife.Reflection
 			var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 			int itemCount = ItemTypes.Count;
 			if (itemCount == 0)
-				return items => default;
+				return items => default!;
 
 			int genericTypeCount = Math.Min(8, itemCount);
 			var constructor = type.GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == genericTypeCount);

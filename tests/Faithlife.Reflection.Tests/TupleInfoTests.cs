@@ -155,7 +155,7 @@ namespace Faithlife.Reflection.Tests
 		[Test]
 		public void IsTuple()
 		{
-			TupleInfo.IsTuple(null).Should().BeFalse();
+			TupleInfo.IsTuple(null!).Should().BeFalse();
 			TupleInfo.IsTuple("ValueTuple").Should().BeFalse();
 			TupleInfo.IsTuple(ValueTuple.Create(true)).Should().BeTrue();
 			TupleInfo.IsTuple(default(ValueTuple)).Should().BeTrue();

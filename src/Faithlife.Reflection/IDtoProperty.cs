@@ -34,7 +34,7 @@ namespace Faithlife.Reflection
 		/// Gets the value of the property or field for the specified instance of the DTO.
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
-		object GetValue(object source);
+		object? GetValue(object source);
 
 		/// <summary>
 		/// Sets the value of the property or field for the specified instance of the DTO.
@@ -42,7 +42,7 @@ namespace Faithlife.Reflection
 		/// <param name="source">The DTO instance.</param>
 		/// <param name="value">The value to which to set the property or field.</param>
 		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
-		void SetValue(object source, object value);
+		void SetValue(object source, object? value);
 	}
 
 	/// <summary>
@@ -57,7 +57,7 @@ namespace Faithlife.Reflection
 		/// Gets the value of the property or field for the specified instance of the DTO.
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
-		object GetValue(T source);
+		object? GetValue(T source);
 
 		/// <summary>
 		/// Sets the value of the property or field for the specified instance of the DTO.
@@ -65,6 +65,6 @@ namespace Faithlife.Reflection
 		/// <param name="source">The DTO instance.</param>
 		/// <param name="value">The value to which to set the property or field.</param>
 		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
-		void SetValue(T source, object value);
+		void SetValue(T source, object? value);
 	}
 }

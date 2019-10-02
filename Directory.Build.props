@@ -3,6 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>0.2.1</VersionPrefix>
     <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>portable</DebugType>
     <DebugSymbols>True</DebugSymbols>
