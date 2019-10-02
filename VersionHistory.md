@@ -8,6 +8,11 @@ Prefix the description of the change with `[major]`, `[minor]`, or `[patch]` in 
 
 ## Released
 
+### 1.0.0
+
+* [minor] Support nullable reference types.
+* [major] `ShallowClone` now throws on `null`.
+
 ### 0.2.1
 
 * Update docs, build script.
