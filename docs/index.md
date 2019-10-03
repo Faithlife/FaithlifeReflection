@@ -32,10 +32,10 @@ To access the information for a DTO, call [`DtoInfo.GetInfo`](Faithlife.Reflecti
 
 ### Getting properties
 
-The following method creates a dictionary of property names and values from an arbitrary DTO instance.
+The following method creates a dictionary of property names and values from an arbitrary DTO instance. [(Try it!)](https://dotnetfiddle.net/27H2j1)
 
 ```csharp
-IReadOnlyDictionary<string, object> ConvertDtoToDictionary(object dto) =>
+static IReadOnlyDictionary<string, object> ConvertDtoToDictionary(object dto) =>
     DtoInfo.GetInfo(dto.GetType()).Properties.ToDictionary(x => x.Name, x => x.GetValue(dto));
 ```
 
@@ -43,10 +43,10 @@ For example, `ConvertDtoToDictionary(new { one = 1, two = "II" })` returns `new 
 
 ### Setting properties
 
-The following method creates a new instance of the specified type and sets its `Id` property to the specified string.
+The following method creates a new instance of the specified type and sets its `Id` property to the specified string. [(Try it!)](https://dotnetfiddle.net/mB0jFF)
 
 ```csharp
-T CreateWithId<T>(string id)
+static T CreateWithId<T>(string id)
 {
     var dtoInfo = DtoInfo.GetInfo<T>();
     var dto = dtoInfo.CreateNew();
@@ -73,10 +73,10 @@ To access the information for a tuple, call [`TupleInfo.GetInfo`](Faithlife.Refl
 
 ### Creating a tuple
 
-The following method splits a string and converts the substrings to items of the specified tuple.
+The following method splits a string and converts the substrings to items of the specified tuple. [(Try it!)](https://dotnetfiddle.net/TBqxXW)
 
 ```csharp
-T SplitString<T>(string text, char delim)
+static T SplitString<T>(string text, char delim)
 {
     var tupleInfo = TupleInfo.GetInfo<T>();
     var items = new object[tupleInfo.ItemTypes.Count];
