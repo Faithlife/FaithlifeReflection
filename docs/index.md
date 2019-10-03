@@ -28,25 +28,7 @@ Anonymous types and other read-only DTO types also work well with this class lib
 
 ### Accessing info
 
-The easiest way to access the DTO info is to call [`DtoInfo.GetInfo`](Faithlife.Reflection/DtoInfo/GetInfo.md) with the `Type` of the DTO.
-
-```csharp
-int GetPropertyCount(object dto)
-{
-    IDtoInfo info = DtoInfo.GetInfo(dto.GetType());
-    return info.Properties.Count;
-}
-```
-
-If possible, use the generic overload of `DtoInfo.GetInfo`, which is slightly more efficient and supports stronger types.
-
-```csharp
-int GetPropertyCount<T>()
-{
-    DtoInfo<T> info = DtoInfo.GetInfo<T>();
-    return info.Properties.Count;
-}
-```
+To access the information for a DTO, call [`DtoInfo.GetInfo`](Faithlife.Reflection/DtoInfo/GetInfo.md). The generic overload (`DtoInfo.GetInfo<T>()`) is slightly more efficient and returns information with stronger types than the non-generic overload (`DtoInfo.GetInfo(Type)`).
 
 ### Getting properties
 
