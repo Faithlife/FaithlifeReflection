@@ -83,12 +83,12 @@ namespace Faithlife.Reflection
 		/// Creates a tuple from the specified items.
 		/// </summary>
 		[return: NotNull]
-		public T CreateNew(IEnumerable<object> items) => m_lazyCreator.Value(items);
+		public T CreateNew(IEnumerable<object?> items) => m_lazyCreator.Value(items);
 
 		/// <summary>
 		/// Creates a tuple from the specified items.
 		/// </summary>
-		object ITupleInfo.CreateNew(IEnumerable<object> items) => CreateNew(items);
+		object ITupleInfo.CreateNew(IEnumerable<object?> items) => CreateNew(items);
 
 		internal TupleInfo()
 		{
@@ -101,12 +101,12 @@ namespace Faithlife.Reflection
 				new ReadOnlyCollection<Type>(genericTypeArguments) :
 				new ReadOnlyCollection<Type>(genericTypeArguments.Take(7).Concat(TupleInfo.GetInfo(genericTypeArguments[7]).ItemTypes).ToList());
 
-			m_lazyCreator = new Lazy<Func<IEnumerable<object>, T>>(GetCreator);
+			m_lazyCreator = new Lazy<Func<IEnumerable<object?>, T>>(GetCreator);
 		}
 
 		internal static readonly Lazy<TupleInfo<T>> Instance = new Lazy<TupleInfo<T>>(() => new TupleInfo<T>());
 
-		private Func<IEnumerable<object>, T> GetCreator()
+		private Func<IEnumerable<object?>, T> GetCreator()
 		{
 			var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 			int itemCount = ItemTypes.Count;
@@ -118,8 +118,8 @@ namespace Faithlife.Reflection
 			var restInfo = genericTypeCount < 8 ? null : TupleInfo.GetInfo(type.GenericTypeArguments[7]);
 			return items =>
 			{
-				var arguments = new object[genericTypeCount];
-				var restItems = new object[Math.Max(0, itemCount - genericTypeCount + 1)];
+				var arguments = new object?[genericTypeCount];
+				var restItems = new object?[Math.Max(0, itemCount - genericTypeCount + 1)];
 				int index = 0;
 				foreach (var item in items)
 				{
@@ -139,6 +139,6 @@ namespace Faithlife.Reflection
 			};
 		}
 
-		private readonly Lazy<Func<IEnumerable<object>, T>> m_lazyCreator;
+		private readonly Lazy<Func<IEnumerable<object?>, T>> m_lazyCreator;
 	}
 }

@@ -23,6 +23,6 @@ namespace Faithlife.Reflection
 		/// <summary>
 		/// Creates a tuple from the specified items.
 		/// </summary>
-		object CreateNew(IEnumerable<object> items);
+		object CreateNew(IEnumerable<object?> items);
 	}
 }
