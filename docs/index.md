@@ -24,7 +24,7 @@ The [`DtoInfo`](Faithlife.Reflection/DtoInfo.md) static class makes it easy to:
 * create a new instance of the DTO
 * shallow clone an existing instance of the DTO
 
-Anonymous types and other read-only DTO types also work well with this class library for enumerating and getting property values, but setting property values, creating new instances, etc., will fail at runtime.
+Anonymous types and other DTO types with read-only properties are also supported. Enumerating properties and getting property values will work fine, but other operations like setting properties will fail at runtime.
 
 ### Accessing info
 
@@ -91,4 +91,4 @@ T SplitString<T>(string text, char delim)
 }
 ```
 
-For example, `SplitString<bool, string, int?>("true,hey,2", ',')` returns the tuple `(true, "hey", 2)`.
+For example, `SplitString<(bool, string, int?)>("true,hey,2", ',')` returns the tuple `(true, "hey", 2)`.
