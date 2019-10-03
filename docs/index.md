@@ -48,9 +48,9 @@ The following method creates a new instance of the specified type and sets its `
 ```csharp
 T CreateWithId<T>(string id)
 {
-    var info = DtoInfo.GetInfo<T>();
-    var dto = info.CreateNew();
-    info.GetProperty<string>("Id").SetValue(dto, id);
+    var dtoInfo = DtoInfo.GetInfo<T>();
+    var dto = dtoInfo.CreateNew();
+    dtoInfo.GetProperty<string>("Id").SetValue(dto, id);
     return dto;
 }
 ```
@@ -78,16 +78,16 @@ The following method splits a string and converts the substrings to items of the
 ```csharp
 T SplitString<T>(string text, char delim)
 {
-    var info = TupleInfo.GetInfo<T>();
-    var items = new object[info.ItemTypes.Count];
-    var strings = text.Split(delim, info.ItemTypes.Count);
+    var tupleInfo = TupleInfo.GetInfo<T>();
+    var items = new object[tupleInfo.ItemTypes.Count];
+    var strings = text.Split(delim, tupleInfo.ItemTypes.Count);
     for (int i = 0; i < strings.Length; i++)
     {
-        var itemType = info.ItemTypes[i];
+        var itemType = tupleInfo.ItemTypes[i];
         itemType = Nullable.GetUnderlyingType(itemType) ?? itemType;
         items[i] = Convert.ChangeType(strings[i], itemType, CultureInfo.InvariantCulture);
     }
-    return info.CreateNew(items);
+    return tupleInfo.CreateNew(items);
 }
 ```
 
