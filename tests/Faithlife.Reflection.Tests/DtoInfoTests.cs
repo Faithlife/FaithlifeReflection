@@ -66,7 +66,7 @@ namespace Faithlife.Reflection.Tests
 			property.Name.Should().Be("Integer");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeFalse();
-			((PropertyInfo) property.MemberInfo).GetMethod.Name.Should().Be("get_Integer");
+			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_Integer");
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
@@ -82,7 +82,7 @@ namespace Faithlife.Reflection.Tests
 			property.Name.Should().Be("Integer");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeFalse();
-			((PropertyInfo) property.MemberInfo).GetMethod.Name.Should().Be("get_Integer");
+			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_Integer");
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
@@ -98,7 +98,7 @@ namespace Faithlife.Reflection.Tests
 			property.Name.Should().Be("Integer");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeFalse();
-			((PropertyInfo) property.MemberInfo).GetMethod.Name.Should().Be("get_Integer");
+			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_Integer");
 
 			var dto = new OneProperty { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
@@ -181,7 +181,7 @@ namespace Faithlife.Reflection.Tests
 			property.Name.Should().Be("IntegerProperty");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeTrue();
-			((PropertyInfo) property.MemberInfo).GetMethod.Name.Should().Be("get_IntegerProperty");
+			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_IntegerProperty");
 			property.GetValue(dto).Should().Be(dto.IntegerProperty);
 			Invoking(() => property.SetValue(dto, 24)).Should().Throw<InvalidOperationException>();
 
