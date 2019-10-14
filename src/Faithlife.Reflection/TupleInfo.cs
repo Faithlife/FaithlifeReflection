@@ -51,7 +51,7 @@ namespace Faithlife.Reflection
 		{
 			try
 			{
-				return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, new object[0]);
+				return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 			}
 			catch (TargetInvocationException exception) when (exception.InnerException != null)
 			{
@@ -61,7 +61,7 @@ namespace Faithlife.Reflection
 		}
 
 		private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new ConcurrentDictionary<Type, ITupleInfo>();
-		private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", new Type[0]);
+		private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 	}
 
 	/// <summary>

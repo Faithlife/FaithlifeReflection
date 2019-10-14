@@ -34,7 +34,7 @@ namespace Faithlife.Reflection
 		{
 			try
 			{
-				return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, new object[0]);
+				return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 			}
 			catch (TargetInvocationException exception) when (exception.InnerException != null)
 			{
@@ -44,7 +44,7 @@ namespace Faithlife.Reflection
 		}
 
 		private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new ConcurrentDictionary<Type, IDtoInfo>();
-		private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", new Type[0]);
+		private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 	}
 
 	/// <summary>
