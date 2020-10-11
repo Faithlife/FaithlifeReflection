@@ -49,7 +49,7 @@ namespace Faithlife.Reflection
 		{
 			if (IsReadOnly)
 				throw new InvalidOperationException($"'{Name}' of '{typeof(TSource).Name}' is read-only.");
-			m_lazySetter.Value(source, value);
+			m_lazySetter.Value(source, value!);
 		}
 
 		/// <summary>

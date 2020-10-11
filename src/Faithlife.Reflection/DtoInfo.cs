@@ -51,6 +51,7 @@ namespace Faithlife.Reflection
 	/// Information about a DTO type.
 	/// </summary>
 	/// <typeparam name="T">The DTO type.</typeparam>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Same name.")]
 	public sealed class DtoInfo<T> : IDtoInfo
 	{
 		/// <summary>
@@ -105,7 +106,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <remarks>The DTO must have a public default constructor.</remarks>
 		[return: NotNull]
-		public T CreateNew() => m_lazyCreateNew.Value();
+		public T CreateNew() => m_lazyCreateNew.Value()!;
 
 		/// <summary>
 		/// Clones the specified DTO by copying each property into a new instance.

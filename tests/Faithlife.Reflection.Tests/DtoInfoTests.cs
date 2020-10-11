@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
@@ -10,6 +11,7 @@ using static FluentAssertions.FluentActions;
 namespace Faithlife.Reflection.Tests
 {
 	[TestFixture]
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "For testing.")]
 	public class DtoInfoTests
 	{
 		[Test]
@@ -196,11 +198,12 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		[SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "Testing.")]
 		public void StrongAnonymousType()
 		{
-			DtoInfo<T> getInfo<T>(T _) => DtoInfo.GetInfo<T>();
+			DtoInfo<T> GetInfo<T>(T t) => DtoInfo.GetInfo<T>();
 			var obj = new { Integer = 3, String = "three" };
-			var info = getInfo(obj);
+			var info = GetInfo(obj);
 			info.Properties.Should().HaveCount(2);
 			var property = info.GetProperty("Integer");
 			property.IsReadOnly.Should().BeTrue();
@@ -232,6 +235,10 @@ namespace Faithlife.Reflection.Tests
 			public int Integer;
 		}
 
+		[SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "Testing.")]
+		[SuppressMessage("Performance", "CA1802:Use literals where appropriate", Justification = "Testing.")]
+		[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Testing.")]
+		[SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Testing.")]
 		private class TwoReadOnly
 		{
 			public TwoReadOnly(int one, int two)
@@ -244,7 +251,10 @@ namespace Faithlife.Reflection.Tests
 
 			public readonly int IntegerField;
 
-			public int WriteOnlyProperty { set { } }
+			public int WriteOnlyProperty
+            {
+                set { }
+            }
 
 			public static int StaticIntegerProperty { get; } = 3;
 
@@ -254,7 +264,7 @@ namespace Faithlife.Reflection.Tests
 
 			protected int ProtectedProperty { get; } = 6;
 
-			readonly int m_privateField = 7;
+			private readonly int m_privateField = 7;
 		}
 	}
 }

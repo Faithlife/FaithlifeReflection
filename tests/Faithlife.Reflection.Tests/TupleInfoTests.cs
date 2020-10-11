@@ -60,7 +60,7 @@ namespace Faithlife.Reflection.Tests
 			var info = TupleInfo.GetInfo<ValueTuple>();
 			info.TupleType.Should().Be(typeof(ValueTuple));
 			info.ItemTypes.Should().BeEmpty();
-			info.CreateNew(new object[0]).Should().Be(ValueTuple.Create());
+			info.CreateNew(Array.Empty<object>()).Should().Be(ValueTuple.Create());
 		}
 
 		[Test]

@@ -67,6 +67,7 @@ namespace Faithlife.Reflection
 	/// <summary>
 	/// Information about a tuple type.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Same name.")]
 	public sealed class TupleInfo<T> : ITupleInfo
 	{
 		/// <summary>
@@ -83,7 +84,7 @@ namespace Faithlife.Reflection
 		/// Creates a tuple from the specified items.
 		/// </summary>
 		[return: NotNull]
-		public T CreateNew(IEnumerable<object?> items) => m_lazyCreator.Value(items);
+		public T CreateNew(IEnumerable<object?> items) => m_lazyCreator.Value(items)!;
 
 		/// <summary>
 		/// Creates a tuple from the specified items.
