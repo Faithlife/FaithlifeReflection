@@ -252,9 +252,9 @@ namespace Faithlife.Reflection.Tests
 			public readonly int IntegerField;
 
 			public int WriteOnlyProperty
-            {
-                set { }
-            }
+			{
+				set { }
+			}
 
 			public static int StaticIntegerProperty { get; } = 3;
 

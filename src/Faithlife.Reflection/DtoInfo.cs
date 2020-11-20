@@ -119,7 +119,7 @@ namespace Faithlife.Reflection
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			T clone = CreateNew();
+			var clone = CreateNew();
 			foreach (var property in Properties)
 				property.SetValue(clone, property.GetValue(value));
 			return clone;

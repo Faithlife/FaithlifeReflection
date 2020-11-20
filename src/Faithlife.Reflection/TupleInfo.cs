@@ -39,12 +39,12 @@ namespace Faithlife.Reflection
 		/// <param name="type">The possible tuple type.</param>
 		public static bool IsTupleType(Type type)
 		{
-			string? typeName = type?.FullName;
+			var typeName = type?.FullName;
 			return typeName != null &&
 				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
-				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
-				typeName == "System.ValueTuple" ||
-				IsTupleType(Nullable.GetUnderlyingType(type)));
+					typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
+					typeName == "System.ValueTuple" ||
+					IsTupleType(Nullable.GetUnderlyingType(type)));
 		}
 
 		private static ITupleInfo DoGetInfo(Type type)
@@ -110,18 +110,18 @@ namespace Faithlife.Reflection
 		private Func<IEnumerable<object?>, T> GetCreator()
 		{
 			var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
-			int itemCount = ItemTypes.Count;
+			var itemCount = ItemTypes.Count;
 			if (itemCount == 0)
 				return items => default!;
 
-			int genericTypeCount = Math.Min(8, itemCount);
+			var genericTypeCount = Math.Min(8, itemCount);
 			var constructor = type.GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == genericTypeCount);
 			var restInfo = genericTypeCount < 8 ? null : TupleInfo.GetInfo(type.GenericTypeArguments[7]);
 			return items =>
 			{
 				var arguments = new object?[genericTypeCount];
 				var restItems = new object?[Math.Max(0, itemCount - genericTypeCount + 1)];
-				int index = 0;
+				var index = 0;
 				foreach (var item in items)
 				{
 					if (index == itemCount)
