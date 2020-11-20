@@ -37,14 +37,14 @@ namespace Faithlife.Reflection
 		/// True if the specified type is a supported tuple type.
 		/// </summary>
 		/// <param name="type">The possible tuple type.</param>
-		public static bool IsTupleType(Type type)
+		public static bool IsTupleType(Type? type)
 		{
 			var typeName = type?.FullName;
 			return typeName != null &&
 				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 					typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
 					typeName == "System.ValueTuple" ||
-					IsTupleType(Nullable.GetUnderlyingType(type)));
+					IsTupleType(Nullable.GetUnderlyingType(type!)));
 		}
 
 		private static ITupleInfo DoGetInfo(Type type)

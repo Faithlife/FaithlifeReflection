@@ -140,19 +140,19 @@ namespace Faithlife.Reflection
 			m_lazyCreateNew = new Lazy<Func<T>>(() => Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile());
 
 			m_lazyProperties = new Lazy<IReadOnlyList<IDtoProperty<T>>>(
-				() => new ReadOnlyCollection<IDtoProperty<T>>(getProperties().ToList()));
+				() => new ReadOnlyCollection<IDtoProperty<T>>(GetProperties().ToList()));
 
 			m_lazyPropertiesByName = new Lazy<IReadOnlyDictionary<string, IDtoProperty<T>>>(
 				() => m_lazyProperties.Value.ToDictionary(x => x.Name));
 
-			bool isPublicNonStaticProperty(PropertyInfo info) => info.GetMethod != null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
+			static bool IsPublicNonStaticProperty(PropertyInfo info) => info.GetMethod != null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
 
-			bool isPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
+			static bool IsPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
 
-			IEnumerable<IDtoProperty<T>> getProperties()
+			static IEnumerable<IDtoProperty<T>> GetProperties()
 			{
-				return typeof(T).GetRuntimeProperties().Where(isPublicNonStaticProperty).Select(CreateDtoProperty)
-					.Concat(typeof(T).GetRuntimeFields().Where(isPublicNonStaticField).Select(CreateDtoProperty));
+				return typeof(T).GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
+					.Concat(typeof(T).GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
 			}
 		}
 

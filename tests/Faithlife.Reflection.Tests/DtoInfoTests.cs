@@ -11,7 +11,13 @@ using static FluentAssertions.FluentActions;
 namespace Faithlife.Reflection.Tests
 {
 	[TestFixture]
-	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "For testing.")]
+	[SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "Testing.")]
+	[SuppressMessage("Performance", "CA1802:Use literals where appropriate", Justification = "Testing.")]
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Testing.")]
+	[SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Testing.")]
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Testing.")]
+	[SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = "Testing.")]
+	[SuppressMessage("ReSharper", "ValueParameterNotUsed", Justification = "Testing.")]
 	public class DtoInfoTests
 	{
 		[Test]
@@ -96,7 +102,7 @@ namespace Faithlife.Reflection.Tests
 		public void OnePropertyWeakestPropertyTests()
 		{
 			DtoInfo<OneProperty> info = DtoInfo.GetInfo<OneProperty>();
-			IDtoProperty property = (IDtoProperty) info.Properties.Single();
+			IDtoProperty property = info.Properties.Single();
 			property.Name.Should().Be("Integer");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeFalse();
@@ -156,7 +162,7 @@ namespace Faithlife.Reflection.Tests
 		public void OneFieldWeakestFieldTests()
 		{
 			DtoInfo<OneField> info = DtoInfo.GetInfo<OneField>();
-			IDtoProperty property = (IDtoProperty) info.Properties.Single();
+			IDtoProperty property = info.Properties.Single();
 			property.Name.Should().Be("Integer");
 			property.ValueType.Should().Be(typeof(int));
 			property.IsReadOnly.Should().BeFalse();
@@ -198,7 +204,6 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
-		[SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "Testing.")]
 		public void StrongAnonymousType()
 		{
 			DtoInfo<T> GetInfo<T>(T t) => DtoInfo.GetInfo<T>();
@@ -235,10 +240,6 @@ namespace Faithlife.Reflection.Tests
 			public int Integer;
 		}
 
-		[SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "Testing.")]
-		[SuppressMessage("Performance", "CA1802:Use literals where appropriate", Justification = "Testing.")]
-		[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Testing.")]
-		[SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Testing.")]
 		private class TwoReadOnly
 		{
 			public TwoReadOnly(int one, int two)
