@@ -109,6 +109,64 @@ namespace Faithlife.Reflection
 		public T CreateNew() => m_lazyCreateNew.Value()!;
 
 		/// <summary>
+		/// Creates a new instance of the DTO.
+		/// </summary>
+		/// <param name="argsAndProps">A collection of DTO constructor arguments and mutable DTO properties/fields with which to create and populate the new DTO instance.</param>
+		[return: NotNull]
+		public T CreateNew(IEnumerable<(string Name, object? Value)> argsAndProps)
+		{
+			try
+			{
+				// Try for a constructor that accepts all passed arguments
+				string[] argNames = argsAndProps.Select(arg => arg.Name).ToArray();
+				object?[] argValues = argsAndProps.Select(arg => arg.Value).ToArray();
+				var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
+				return (T) typeof(T).InvokeMember(typeof(T).Name, flags, null, null, argValues, null, null, argNames);
+			}
+			catch (MissingMethodException)
+			{
+				// Separate mutable DTO properties/fields from constructor arguments.
+				var argNames = new List<string>();
+				var argValues = new List<object?>();
+				var mutableProps = new List<(string, object?)>();
+				foreach ((string name, object? value) in argsAndProps)
+				{
+					var propName = Properties.FirstOrDefault(prop =>
+						!prop.IsReadOnly
+						&& name.Equals(prop.Name, StringComparison.OrdinalIgnoreCase)
+						&& (prop.ValueType.IsInstanceOfType(value)
+							|| (value == null && Nullable.GetUnderlyingType(prop.ValueType) != null)))?.Name;
+					if (propName != null)
+					{
+						// Fix incorrect casing of mutable props
+						mutableProps.Add((propName, value));
+					}
+					else
+					{
+						argNames.Add(name);
+						argValues.Add(value);
+					}
+				}
+
+				try
+				{
+					// Try for a constructor that uses remaining arguments
+					var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
+					T newDto = (T) typeof(T).InvokeMember(typeof(T).Name, flags, null, null, argValues.ToArray(), null, null, argNames.ToArray());
+
+					foreach ((string name, object? value) in mutableProps)
+						GetProperty(name).SetValue(newDto, value);
+
+					return newDto;
+				}
+				catch (MissingMethodException)
+				{
+					throw new ArgumentException($"No combination of '{typeof(T).Name}' constructor and mutable properties is compatible with the passed items.");
+				}
+			}
+		}
+
+		/// <summary>
 		/// Clones the specified DTO by copying each property into a new instance.
 		/// </summary>
 		/// <param name="value">The instance to clone.</param>
@@ -132,6 +190,8 @@ namespace Faithlife.Reflection
 		IDtoProperty? IDtoInfo.TryGetProperty(string name) => TryGetProperty(name);
 
 		object IDtoInfo.CreateNew() => CreateNew();
+
+		object IDtoInfo.CreateNew(IEnumerable<(string Name, object? Value)> argsAndProps) => CreateNew(argsAndProps);
 
 		object IDtoInfo.ShallowClone(object value) => ShallowClone((T) value);
 

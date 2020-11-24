@@ -37,6 +37,12 @@ namespace Faithlife.Reflection
 		object CreateNew();
 
 		/// <summary>
+		/// Creates a new instance of the DTO from a collection of properties.
+		/// </summary>
+		/// <param name="argsAndProps">A collection of DTO constructor arguments and mutable DTO properties/fields with which to create and populate the new DTO instance.</param>
+		object CreateNew(IEnumerable<(string Name, object? Value)> argsAndProps);
+
+		/// <summary>
 		/// Clones the specified DTO by copying each property into a new instance.
 		/// </summary>
 		/// <param name="value">The instance to clone.</param>
