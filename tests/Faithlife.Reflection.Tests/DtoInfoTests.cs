@@ -20,6 +20,7 @@ namespace Faithlife.Reflection.Tests
 			DtoInfo<EmptyDto> info = DtoInfo.GetInfo<EmptyDto>();
 			info.Properties.Should().BeEmpty();
 			info.CreateNew().GetType().Should().Be(typeof(EmptyDto));
+			info.CreateNew(Array.Empty<(string, object?)>()).GetType().Should().Be(typeof(EmptyDto));
 			info.ShallowClone(new EmptyDto()).Should().NotBeNull();
 			Invoking(() => info.GetProperty("Nope")).Should().Throw<ArgumentException>();
 			info.TryGetProperty("Nope").Should().BeNull();
@@ -35,6 +36,13 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
+		public void CreateNewThrowsOnNull()
+		{
+			DtoInfo<EmptyDto> info = DtoInfo.GetInfo<EmptyDto>();
+			Invoking(() => info.CreateNew(null!)).Should().Throw<ArgumentNullException>();
+		}
+
+		[Test]
 		public void OnePropertyInfoTests()
 		{
 			DtoInfo<OneProperty> info = DtoInfo.GetInfo<OneProperty>();
@@ -43,6 +51,9 @@ namespace Faithlife.Reflection.Tests
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);
+
+			info.CreateNew(new (string, object?)[] { ("Integer", 35) }).Integer.Should().Be(35);
+			info.CreateNew(new (string, object?)[] { ("iNTEGER", 22) }).Integer.Should().Be(22);
 		}
 
 		[Test]
@@ -54,6 +65,9 @@ namespace Faithlife.Reflection.Tests
 
 			OneProperty dto = new OneProperty { Integer = 42 };
 			((OneProperty) info.ShallowClone(dto)).Integer.Should().Be(dto.Integer);
+
+			((OneProperty) info.CreateNew(new (string, object?)[] { ("Integer", 35) })).Integer.Should().Be(35);
+			((OneProperty) info.CreateNew(new (string, object?)[] { ("iNTEGER", 22) })).Integer.Should().Be(22);
 
 			info.GetProperty("Integer").Name.Should().Be("Integer");
 			info.TryGetProperty("Integer")!.Name.Should().Be("Integer");
@@ -117,6 +131,9 @@ namespace Faithlife.Reflection.Tests
 
 			OneField dto = new OneField { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);
+
+			info.CreateNew(new (string, object?)[] { ("Integer", 35) }).Integer.Should().Be(35);
+			info.CreateNew(new (string, object?)[] { ("iNTEGER", 22) }).Integer.Should().Be(22);
 		}
 
 		[Test]
@@ -172,7 +189,7 @@ namespace Faithlife.Reflection.Tests
 		public void TwoReadOnlyTests()
 		{
 			DtoInfo<TwoReadOnly> info = DtoInfo.GetInfo<TwoReadOnly>();
-			info.Properties.Count.Should().Be(2);
+			info.Properties.Count.Should().Be(3);
 			Invoking(() => info.CreateNew()).Should().Throw<ArgumentException>();
 
 			TwoReadOnly dto = new TwoReadOnly(1, 2);
@@ -195,6 +212,22 @@ namespace Faithlife.Reflection.Tests
 			((FieldInfo) field.MemberInfo).Name.Should().Be("IntegerField");
 			field.GetValue(dto).Should().Be(dto.IntegerField);
 			Invoking(() => field.SetValue(dto, 24)).Should().Throw<InvalidOperationException>();
+
+			TwoReadOnly newDto = info.CreateNew(new (string, object?)[] { ("one", 3), ("two", 4) });
+			newDto.IntegerProperty.Should().Be(3);
+			newDto.IntegerField.Should().Be(2);
+			Invoking(() => { newDto.WriteOnlyProperty = 5; }).Should().NotThrow();
+			newDto = info.CreateNew(new (string, object?)[] { ("one", 6), ("two", 7), ("ReadWriteProperty", 8) });
+			newDto.ReadWriteProperty.Should().Be(8);
+			newDto = info.CreateNew(new (string, object?)[] { ("ONE", 9), ("TWO", 10), ("rEADwRITEpROPERTY", 11) });
+			newDto.IntegerProperty.Should().Be(9);
+			newDto.IntegerField.Should().Be(2);
+			newDto.ReadWriteProperty.Should().Be(11);
+
+			Invoking(() => info.CreateNew(new (string, object?)[] { ("one", 12), ("two", 13), ("WriteOnlyProperty", 14) })).Should().Throw<ArgumentException>();
+			Invoking(() => info.CreateNew(new (string, object?)[] { ("one", 15), ("two", 16), ("IntegerProperty", 17) })).Should().Throw<ArgumentException>();
+			Invoking(() => info.CreateNew(new (string, object?)[] { ("one", 18), ("two", 19), ("IntegerField", 20) })).Should().Throw<ArgumentException>();
+			Invoking(() => info.CreateNew(new (string, object?)[] { ("one", 21), ("two", 22), ("StaticIntegerProperty", 23) })).Should().Throw<ArgumentException>();
 		}
 
 		[Test]
@@ -255,6 +288,8 @@ namespace Faithlife.Reflection.Tests
             {
                 set { }
             }
+
+			public int ReadWriteProperty { get; set; }
 
 			public static int StaticIntegerProperty { get; } = 3;
 
