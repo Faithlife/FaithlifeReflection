@@ -112,6 +112,7 @@ namespace Faithlife.Reflection
 		/// Creates a new instance of the DTO.
 		/// </summary>
 		/// <param name="argsAndProps">A collection of DTO constructor arguments and mutable DTO properties/fields with which to create and populate the new DTO instance.</param>
+		/// <exception cref="ArgumentException">No combination of constructor and mutable properties/fields is compatible with the passed items.</exception>
 		[return: NotNull]
 		public T CreateNew(IEnumerable<(string Name, object? Value)> argsAndProps)
 		{
@@ -161,7 +162,7 @@ namespace Faithlife.Reflection
 				}
 				catch (MissingMethodException)
 				{
-					throw new ArgumentException($"No combination of '{typeof(T).Name}' constructor and mutable properties is compatible with the passed items.");
+					throw new ArgumentException($"No combination of '{typeof(T).Name}' constructor and mutable properties/fields is compatible with the passed items.");
 				}
 			}
 		}

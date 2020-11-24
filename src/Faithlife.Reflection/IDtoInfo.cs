@@ -40,6 +40,7 @@ namespace Faithlife.Reflection
 		/// Creates a new instance of the DTO from a collection of properties.
 		/// </summary>
 		/// <param name="argsAndProps">A collection of DTO constructor arguments and mutable DTO properties/fields with which to create and populate the new DTO instance.</param>
+		/// <exception cref="ArgumentException">No combination of constructor and mutable properties/fields is compatible with the passed items.</exception>
 		object CreateNew(IEnumerable<(string Name, object? Value)> argsAndProps);
 
 		/// <summary>
