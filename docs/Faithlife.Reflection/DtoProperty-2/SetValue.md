@@ -15,7 +15,7 @@ public void SetValue(TSource source, TValue value)
 
 | exception | condition |
 | --- | --- |
-| InvalidOperationException | The property or field is read-only. |
+| InvalidOperationException | The property or field is read-only, or the DTO is a value type. |
 
 ## See Also
 
