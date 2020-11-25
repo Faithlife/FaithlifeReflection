@@ -144,7 +144,7 @@ namespace Faithlife.Reflection
 				() => new ReadOnlyCollection<IDtoProperty<T>>(GetProperties().ToList()));
 
 			m_lazyPropertiesByName = new Lazy<IReadOnlyDictionary<string, IDtoProperty<T>>>(
-				() => m_lazyProperties.Value.ToDictionary(x => x.Name));
+				() => m_lazyProperties.Value.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase));
 
 			static bool IsPublicNonStaticProperty(PropertyInfo info) => info.GetMethod != null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
 
