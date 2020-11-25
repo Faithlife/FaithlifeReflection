@@ -63,6 +63,9 @@ namespace Faithlife.Reflection.Tests
 
 			info.GetProperty("Integer").Name.Should().Be("Integer");
 			info.TryGetProperty("Integer")!.Name.Should().Be("Integer");
+
+			info.GetProperty("integer").Name.Should().Be("Integer");
+			info.TryGetProperty("integer")!.Name.Should().Be("Integer");
 		}
 
 		[Test]
