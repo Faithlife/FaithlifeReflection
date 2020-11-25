@@ -215,23 +215,23 @@ namespace Faithlife.Reflection.Tests
 		public void StrongNullablePoint()
 		{
 			var info = DtoInfo.GetInfo<Point?>();
-			info.CreateNew().Should().BeNull();
-			info.CreateNew(("value", new Point(1, 2))).Should().Be(new Point { X = 1, Y = 2 });
+			info.CreateNew().Should().Be(default(Point));
+			info.CreateNew(("x", 1)).Should().Be(new Point { X = 1 });
 		}
 
 		[Test]
 		public void WeakNullablePoint()
 		{
 			var info = DtoInfo.GetInfo(typeof(Point?));
-			info.CreateNew().Should().BeNull();
-			info.CreateNew(("value", new Point(1, 2))).Should().Be(new Point { X = 1, Y = 2 });
+			info.CreateNew().Should().Be(default(Point));
+			info.CreateNew(("x", 1)).Should().Be(new Point { X = 1 });
 		}
 
 		[Test]
 		public void StrongColor()
 		{
 			var info = DtoInfo.GetInfo<Color>();
-			info.CreateNew().Should().Be(default(Color));
+			info.CreateNew().Should().Be(new Color(0, 0, 0));
 			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3)).Should().Be(new Color(255, 1, 2, 3));
 			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3), ("a", (byte) 4)).Should().Be(new Color(4, 1, 2, 3));
 		}
@@ -240,7 +240,7 @@ namespace Faithlife.Reflection.Tests
 		public void WeakColor()
 		{
 			var info = DtoInfo.GetInfo(typeof(Color));
-			info.CreateNew().Should().Be(default(Color));
+			info.CreateNew().Should().Be(new Color(0, 0, 0));
 			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3)).Should().Be(new Color(255, 1, 2, 3));
 			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3), ("a", (byte) 4)).Should().Be(new Color(4, 1, 2, 3));
 		}

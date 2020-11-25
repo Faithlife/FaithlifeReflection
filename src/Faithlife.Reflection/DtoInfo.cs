@@ -282,14 +282,17 @@ namespace Faithlife.Reflection
 
 			static bool IsPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
 
-			static IEnumerable<IDtoProperty<T>> GetProperties() =>
-				typeof(T).GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
-					.Concat(typeof(T).GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
+			static IEnumerable<IDtoProperty<T>> GetProperties()
+			{
+				var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+				return type.GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
+					.Concat(type.GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
+			}
 		}
 
 		private static IDtoProperty<T> CreateDtoProperty(PropertyInfo propertyInfo) =>
 			(IDtoProperty<T>) typeof(DtoProperty<,>)
-				.MakeGenericType(propertyInfo.DeclaringType, propertyInfo.PropertyType)
+				.MakeGenericType(typeof(T), propertyInfo.PropertyType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(PropertyInfo) }))
@@ -297,7 +300,7 @@ namespace Faithlife.Reflection
 
 		private static IDtoProperty<T> CreateDtoProperty(FieldInfo fieldInfo) =>
 			(IDtoProperty<T>) typeof(DtoProperty<,>)
-				.MakeGenericType(fieldInfo.DeclaringType, fieldInfo.FieldType)
+				.MakeGenericType(typeof(T), fieldInfo.FieldType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(FieldInfo) }))
@@ -308,15 +311,12 @@ namespace Faithlife.Reflection
 
 		private IEnumerable<Creator?> GetCreators()
 		{
-			// null means default constructor
-			if (m_isValueType)
-				yield return null;
-
-			foreach (var constructor in typeof(T).GetConstructors())
+			foreach (var constructor in (Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T)).GetConstructors())
 			{
 				var parameters = constructor.GetParameters();
 				if (parameters.Length == 0)
 				{
+					// null means default constructor
 					yield return null;
 				}
 				else
