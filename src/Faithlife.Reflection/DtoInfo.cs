@@ -150,35 +150,29 @@ namespace Faithlife.Reflection
 
 			static bool IsPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
 
-			static IEnumerable<IDtoProperty<T>> GetProperties()
-			{
-				return typeof(T).GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
+			static IEnumerable<IDtoProperty<T>> GetProperties() =>
+				typeof(T).GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
 					.Concat(typeof(T).GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
-			}
 		}
 
-		private static IDtoProperty<T> CreateDtoProperty(PropertyInfo propertyInfo)
-		{
-			return (IDtoProperty<T>) typeof(DtoProperty<,>)
+		private static IDtoProperty<T> CreateDtoProperty(PropertyInfo propertyInfo) =>
+			(IDtoProperty<T>) typeof(DtoProperty<,>)
 				.MakeGenericType(propertyInfo.DeclaringType, propertyInfo.PropertyType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(PropertyInfo) }))
 				.Invoke(new object[] { propertyInfo });
-		}
 
-		private static IDtoProperty<T> CreateDtoProperty(FieldInfo fieldInfo)
-		{
-			return (IDtoProperty<T>) typeof(DtoProperty<,>)
+		private static IDtoProperty<T> CreateDtoProperty(FieldInfo fieldInfo) =>
+			(IDtoProperty<T>) typeof(DtoProperty<,>)
 				.MakeGenericType(fieldInfo.DeclaringType, fieldInfo.FieldType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(FieldInfo) }))
 				.Invoke(new object[] { fieldInfo });
-		}
 
-		private static string GetPropertyName<TValue>(Expression<Func<T, TValue>> getter)
-			=> getter.Body is MemberExpression body ? body.Member.Name : throw new ArgumentException("Invalid getter.", nameof(getter));
+		private static string GetPropertyName<TValue>(Expression<Func<T, TValue>> getter) =>
+			getter.Body is MemberExpression body ? body.Member.Name : throw new ArgumentException("Invalid getter.", nameof(getter));
 
 		internal static readonly Lazy<DtoInfo<T>> Instance = new Lazy<DtoInfo<T>>(() => new DtoInfo<T>());
 
