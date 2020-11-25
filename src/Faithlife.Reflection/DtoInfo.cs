@@ -176,6 +176,9 @@ namespace Faithlife.Reflection
 		[return: NotNull]
 		private T DoCreateNew(IReadOnlyCollection<(IDtoProperty<T> Property, object? Value)> propertyValues)
 		{
+			if (propertyValues is null)
+				throw new ArgumentNullException(nameof(propertyValues));
+
 			// find the constructor with the fewest parameters that works with the specified property values
 			foreach (var creator in m_lazyCreators.Value)
 			{
