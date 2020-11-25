@@ -141,7 +141,7 @@ namespace Faithlife.Reflection
 			m_lazyCreateNew = new Lazy<Func<T>>(() => Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile());
 
 			m_lazyProperties = new Lazy<IReadOnlyList<IDtoProperty<T>>>(
-				() => new ReadOnlyCollection<IDtoProperty<T>>(GetProperties().ToList()));
+				() => new ReadOnlyCollection<IDtoProperty<T>>(GetProperties().ToArray()));
 
 			m_lazyPropertiesByName = new Lazy<IReadOnlyDictionary<string, IDtoProperty<T>>>(
 				() => m_lazyProperties.Value.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase));
