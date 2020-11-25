@@ -178,14 +178,82 @@ namespace Faithlife.Reflection.Tests
 		}
 
 		[Test]
-		public void TwoReadOnlyTests()
+		public void StrongMixedDto()
 		{
-			DtoInfo<TwoReadOnly> info = DtoInfo.GetInfo<TwoReadOnly>();
-			info.Properties.Count.Should().Be(2);
-			Invoking(() => info.CreateNew()).Should().Throw<ArgumentException>();
+			var info = DtoInfo.GetInfo<MixedDto>();
+			info.CreateNew().Should().BeEquivalentTo(new MixedDto());
+			info.CreateNew(("string", "hey")).Should().BeEquivalentTo(new MixedDto { String = "hey" });
+			info.CreateNew(("integer", 1), ("string", "wow")).Should().BeEquivalentTo(new MixedDto(1) { String = "wow" });
+		}
 
-			TwoReadOnly dto = new TwoReadOnly(1, 2);
-			Invoking(() => info.ShallowClone(dto)).Should().Throw<ArgumentException>();
+		[Test]
+		public void WeakMixedDto()
+		{
+			IDtoInfo info = DtoInfo.GetInfo(typeof(MixedDto));
+			info.CreateNew().Should().BeEquivalentTo(new MixedDto());
+			info.CreateNew(("string", "hey")).Should().BeEquivalentTo(new MixedDto { String = "hey" });
+			info.CreateNew(("integer", 1), ("string", "wow")).Should().BeEquivalentTo(new MixedDto(1) { String = "wow" });
+		}
+
+		[Test]
+		public void StrongPoint()
+		{
+			var info = DtoInfo.GetInfo<Point>();
+			info.CreateNew().Should().Be(default(Point));
+			info.CreateNew(("x", 1)).Should().Be(new Point { X = 1 });
+		}
+
+		[Test]
+		public void WeakPoint()
+		{
+			var info = DtoInfo.GetInfo(typeof(Point));
+			info.CreateNew().Should().Be(default(Point));
+			info.CreateNew(("x", 1)).Should().Be(new Point { X = 1 });
+		}
+
+		[Test]
+		public void StrongNullablePoint()
+		{
+			var info = DtoInfo.GetInfo<Point?>();
+			info.CreateNew().Should().BeNull();
+			info.CreateNew(("value", new Point(1, 2))).Should().Be(new Point { X = 1, Y = 2 });
+		}
+
+		[Test]
+		public void WeakNullablePoint()
+		{
+			var info = DtoInfo.GetInfo(typeof(Point?));
+			info.CreateNew().Should().BeNull();
+			info.CreateNew(("value", new Point(1, 2))).Should().Be(new Point { X = 1, Y = 2 });
+		}
+
+		[Test]
+		public void StrongColor()
+		{
+			var info = DtoInfo.GetInfo<Color>();
+			info.CreateNew().Should().Be(default(Color));
+			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3)).Should().Be(new Color(255, 1, 2, 3));
+			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3), ("a", (byte) 4)).Should().Be(new Color(4, 1, 2, 3));
+		}
+
+		[Test]
+		public void WeakColor()
+		{
+			var info = DtoInfo.GetInfo(typeof(Color));
+			info.CreateNew().Should().Be(default(Color));
+			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3)).Should().Be(new Color(255, 1, 2, 3));
+			info.CreateNew(("r", (byte) 1), ("g", (byte) 2), ("b", (byte) 3), ("a", (byte) 4)).Should().Be(new Color(4, 1, 2, 3));
+		}
+
+		[Test]
+		public void WeirdDtoTests()
+		{
+			DtoInfo<WeirdDto> info = DtoInfo.GetInfo<WeirdDto>();
+			info.Properties.Count.Should().Be(2);
+			Invoking(() => info.CreateNew()).Should().Throw<InvalidOperationException>();
+
+			WeirdDto dto = new WeirdDto(1, 2);
+			Invoking(() => info.ShallowClone(dto)).Should().Throw<InvalidOperationException>();
 
 			var property = info.GetProperty<int>("IntegerProperty");
 			info.GetProperty(x => x.IntegerProperty).Should().Be(property);
@@ -216,6 +284,12 @@ namespace Faithlife.Reflection.Tests
 			var property = info.GetProperty("Integer");
 			property.IsReadOnly.Should().BeTrue();
 			property.GetValue(obj).Should().Be(3);
+			info.ShallowClone(obj).Integer.Should().Be(3);
+			info.CreateNew().Integer.Should().Be(0);
+			info.CreateNew((property, 4)).Integer.Should().Be(4);
+			info.CreateNew(("integer", 4)).Integer.Should().Be(4);
+			Invoking(() => info.CreateNew(("nope", 4))).Should().Throw<ArgumentException>();
+			Invoking(() => info.CreateNew(("integer", "4"))).Should().Throw<ArgumentException>();
 		}
 
 		[Test]
@@ -227,6 +301,12 @@ namespace Faithlife.Reflection.Tests
 			var property = info.GetProperty("Integer");
 			property.IsReadOnly.Should().BeTrue();
 			property.GetValue(obj).Should().Be(3);
+			property.GetValue(info.ShallowClone(obj)).Should().Be(3);
+			property.GetValue(info.CreateNew()).Should().Be(0);
+			property.GetValue(info.CreateNew((property, 4))).Should().Be(4);
+			property.GetValue(info.CreateNew(("integer", 4))).Should().Be(4);
+			Invoking(() => info.CreateNew(("nope", 4))).Should().Throw<ArgumentException>();
+			Invoking(() => info.CreateNew(("integer", "4"))).Should().Throw<ArgumentException>();
 		}
 
 		private sealed class EmptyDto
@@ -243,12 +323,41 @@ namespace Faithlife.Reflection.Tests
 			public int Integer;
 		}
 
-		private class TwoReadOnly
+		private sealed class MixedDto
 		{
-			public TwoReadOnly(int one, int two)
+			public MixedDto(int integer = 42)
+			{
+				Integer = integer;
+			}
+
+			public int Integer { get; }
+
+			public string? String { get; set; }
+		}
+
+		private struct Point
+		{
+			public Point(int x, int y) => (X, Y) = (x, y);
+			public int X { get; set; }
+			public int Y { get; set; }
+		}
+
+		private readonly struct Color
+		{
+			public Color(byte r, byte g, byte b) => (A, R, G, B) = (255, r, g, b);
+			public Color(byte a, byte r, byte g, byte b) => (A, R, G, B) = (a, r, g, b);
+			public byte A { get; }
+			public byte R { get; }
+			public byte G { get; }
+			public byte B { get; }
+		}
+
+		private class WeirdDto
+		{
+			public WeirdDto(int one, int two)
 			{
 				IntegerProperty = one;
-				IntegerField = 2;
+				IntegerField = two;
 			}
 
 			public int IntegerProperty { get; }
