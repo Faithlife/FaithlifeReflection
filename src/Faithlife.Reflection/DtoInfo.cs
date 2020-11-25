@@ -28,7 +28,7 @@ namespace Faithlife.Reflection
 		/// Gets weakly-typed information about the specified DTO type.
 		/// </summary>
 		/// <param name="type">The DTO type.</param>
-		public static IDtoInfo GetInfo(Type type) => s_infos.GetOrAdd(type, DoGetInfo);
+		public static IDtoInfo GetInfo(Type type) => s_infos.GetOrAdd(type ?? throw new ArgumentNullException(nameof(type)), DoGetInfo);
 
 		private static IDtoInfo DoGetInfo(Type type)
 		{
@@ -74,7 +74,7 @@ namespace Faithlife.Reflection
 		/// <param name="name">The property name.</param>
 		/// <returns>Returns <c>null</c> if the property does not exist.</returns>
 		public IDtoProperty<T>? TryGetProperty(string name) =>
-			m_lazyPropertiesByName.Value.TryGetValue(name, out var property) ? property : null;
+			m_lazyPropertiesByName.Value.TryGetValue(name ?? throw new ArgumentNullException(nameof(name)), out var property) ? property : null;
 
 		/// <summary>
 		/// Returns the property named by the specified getter.
@@ -99,7 +99,7 @@ namespace Faithlife.Reflection
 		/// <param name="name">The property name.</param>
 		/// <returns>Returns <c>null</c> if the property does not exist.</returns>
 		public DtoProperty<T, TValue>? TryGetProperty<TValue>(string name) =>
-			m_lazyPropertiesByName.Value.TryGetValue(name, out var property) ? property as DtoProperty<T, TValue> : null;
+			m_lazyPropertiesByName.Value.TryGetValue(name ?? throw new ArgumentNullException(nameof(name)), out var property) ? property as DtoProperty<T, TValue> : null;
 
 		/// <summary>
 		/// Creates a new instance of the DTO.
@@ -133,7 +133,8 @@ namespace Faithlife.Reflection
 
 		object IDtoInfo.CreateNew() => CreateNew();
 
-		object IDtoInfo.ShallowClone(object value) => ShallowClone((T) value);
+		object IDtoInfo.ShallowClone(object value) =>
+			ShallowClone(value is T t ? t : throw new ArgumentException($"Value must be of type '{typeof(T).FullName}'.", nameof(value)));
 
 		internal DtoInfo()
 		{

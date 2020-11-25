@@ -37,7 +37,8 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
 		[return: MaybeNull]
-		public TValue GetValue(TSource source) => m_lazyGetter.Value(source);
+		public TValue GetValue(TSource source) =>
+			m_lazyGetter.Value(source ?? throw new ArgumentNullException(nameof(source)));
 
 		/// <summary>
 		/// Sets the value of the property or field for the specified instance of the DTO.
@@ -49,20 +50,23 @@ namespace Faithlife.Reflection
 		{
 			if (IsReadOnly)
 				throw new InvalidOperationException($"'{Name}' of '{typeof(TSource).Name}' is read-only.");
-			m_lazySetter.Value(source, value!);
+			m_lazySetter.Value(source ?? throw new ArgumentNullException(nameof(source)), value!);
 		}
 
 		/// <summary>
 		/// Gets the value of the property or field for the specified instance of the DTO.
 		/// </summary>
 		/// <remarks>See <see cref="GetValue"/>.</remarks>
-		object? IDtoProperty.GetValue(object source) => GetValue((TSource) source);
+		object? IDtoProperty.GetValue(object source) =>
+			GetValue(source is TSource s ? s : throw new ArgumentException($"Source must be of type '{typeof(TSource).FullName}'.", nameof(source)));
 
 		/// <summary>
 		/// Sets the value of the property or field for the specified instance of the DTO.
 		/// </summary>
 		/// <remarks>See <see cref="SetValue"/>.</remarks>
-		void IDtoProperty.SetValue(object source, object? value) => SetValue((TSource) source, (TValue) value!);
+		void IDtoProperty.SetValue(object source, object? value) =>
+			SetValue(source is TSource s ? s : throw new ArgumentException($"Source must be of type '{typeof(TSource).FullName}'.", nameof(source)),
+				(TValue) value!);
 
 		/// <summary>
 		/// Gets the value of the property or field for the specified instance of the DTO.
