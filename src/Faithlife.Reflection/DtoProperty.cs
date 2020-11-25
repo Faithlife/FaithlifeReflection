@@ -45,7 +45,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
 		/// <param name="value">The value to which to set the property or field.</param>
-		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
+		/// <exception cref="InvalidOperationException">The property or field is read-only, or the DTO is a value type.</exception>
 		public void SetValue(TSource source, [AllowNull] TValue value)
 		{
 			if (IsReadOnly)
@@ -112,6 +112,9 @@ namespace Faithlife.Reflection
 
 		private Action<TSource, TValue> GeneratePropertySetter()
 		{
+			if (typeof(TSource).IsValueType)
+				throw new InvalidOperationException("Properties cannot be set on value types.");
+
 			var instanceParameterExpression = Expression.Parameter(typeof(TSource));
 			var parameterExpression = Expression.Parameter(typeof(TValue), Name);
 			var propertyValueExpression = Expression.Property(instanceParameterExpression, Name);
@@ -129,6 +132,9 @@ namespace Faithlife.Reflection
 
 		private Action<TSource, TValue> GenerateFieldSetter()
 		{
+			if (typeof(TSource).IsValueType)
+				throw new InvalidOperationException("Properties cannot be set on value types.");
+
 			var instanceParameterExpression = Expression.Parameter(typeof(TSource));
 			var parameterExpression = Expression.Parameter(typeof(TValue), Name);
 			var fieldValueExpression = Expression.Field(instanceParameterExpression, Name);

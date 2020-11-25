@@ -41,7 +41,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
 		/// <param name="value">The value to which to set the property or field.</param>
-		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
+		/// <exception cref="InvalidOperationException">The property or field is read-only, or the DTO is a value type.</exception>
 		void SetValue(object source, object? value);
 	}
 
@@ -64,7 +64,7 @@ namespace Faithlife.Reflection
 		/// </summary>
 		/// <param name="source">The DTO instance.</param>
 		/// <param name="value">The value to which to set the property or field.</param>
-		/// <exception cref="InvalidOperationException">The property or field is read-only.</exception>
+		/// <exception cref="InvalidOperationException">The property or field is read-only, or the DTO is a value type.</exception>
 		void SetValue(T source, object? value);
 	}
 }
