@@ -309,6 +309,16 @@ namespace Faithlife.Reflection.Tests
 			Invoking(() => info.CreateNew(("integer", "4"))).Should().Throw<ArgumentException>();
 		}
 
+		[Test]
+		public void StrongInitOnly()
+		{
+			var info = DtoInfo.GetInfo<InitOnlyDto>();
+			var dto = info.CreateNew(("a", 1), ("b", 2));
+			dto.A.Should().Be(1);
+			dto.B.Should().Be(2);
+			info.ShallowClone(dto).A.Should().Be(1);
+		}
+
 		private sealed class EmptyDto
 		{
 		}
@@ -378,6 +388,13 @@ namespace Faithlife.Reflection.Tests
 			protected int ProtectedProperty { get; } = 6;
 
 			private readonly int m_privateField = 7;
+		}
+
+		private sealed class InitOnlyDto
+		{
+			public int A { get; init; }
+
+			public int B { get; init; }
 		}
 	}
 }
