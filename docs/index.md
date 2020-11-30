@@ -21,12 +21,12 @@ The [`DtoInfo`](Faithlife.Reflection/DtoInfo.md) static class makes it easy to:
 * enumerate the public non-static properties and fields of a DTO type, both read/write and read-only
 * get the name, type, and other metadata for each property/field of the DTO type
 * get or set the value of a property/field of an instance of the DTO
-* create a new instance of the DTO
+* create a new instance of the DTO, using constructor arguments if needed to initialize read-only properties
 * shallow clone an existing instance of the DTO
 
-Anonymous types and other DTO types with read-only properties are also supported. Enumerating properties and getting property values will work fine, but other operations like setting properties will fail at runtime.
+Anonymous types, value types, and other DTO types with read-only properties are also supported. Enumerating properties and getting property values will work fine, but other operations like setting properties will fail at runtime.
 
-### Accessing info
+### Accessing DTO info
 
 To access the information for a DTO, call [`DtoInfo.GetInfo`](Faithlife.Reflection/DtoInfo/GetInfo.md). The generic overload, `DtoInfo.GetInfo<T>()`, is slightly more efficient and returns information with stronger types than the non-generic overload, `DtoInfo.GetInfo(Type)`.
 
@@ -57,6 +57,12 @@ static T CreateWithId<T>(string id)
 
 For example, `CreateWithId<Widget>("xyzzy")` returns `new Widget { Id = "xyzzy" }`.
 
+Better yet, pass tuples of property names and values to automatically initialize properties, even if they are read-only. [(Try it!)](https://dotnetfiddle.net/5TJSiB)
+
+```csharp
+static T CreateWithId<T>(string id) => DtoInfo.GetInfo<T>().CreateNew(("Id", id));
+```
+
 ## Tuples
 
 C# 7 introduced syntax for tuples, which use the `System.ValueTuple<...>` types. Before that, the `System.Tuple<...>` types were commonly used. This library supports both kinds of tuples.
@@ -67,7 +73,7 @@ The [`TupleInfo`](Faithlife.Reflection/TupleInfo.md) static class makes it easy 
 * enumerate the types of the tuple items (even for tuples with more than seven items)
 * create a tuple from a list of objects
 
-### Accessing info
+### Accessing tuple info
 
 To access the information for a tuple, call [`TupleInfo.GetInfo`](Faithlife.Reflection/TupleInfo/GetInfo.md). The generic overload, `TupleInfo.GetInfo<T>()`, is slightly more efficient and returns information with stronger types than the non-generic overload, `TupleInfo.GetInfo(Type)`.
 
