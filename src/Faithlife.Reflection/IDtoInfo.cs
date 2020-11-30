@@ -36,12 +36,6 @@ namespace Faithlife.Reflection
 		object CreateNew();
 
 		/// <summary>
-		/// Clones the specified DTO by copying each property into a new instance.
-		/// </summary>
-		/// <param name="value">The instance to clone.</param>
-		object ShallowClone(object value);
-
-		/// <summary>
 		/// Creates a new instance of the DTO, assigning properties with the specified names to the specified values.
 		/// </summary>
 		/// <param name="propertyValues">The property names and values.</param>
@@ -50,5 +44,11 @@ namespace Faithlife.Reflection
 		/// of the specified properties are read-only, the instance is created with a public constructor whose parameters
 		/// match the properties of the DTO.</remarks>
 		object CreateNew(IEnumerable<(IDtoProperty Property, object? Value)> propertyValues);
+
+		/// <summary>
+		/// Clones the specified DTO by copying each property into a new instance.
+		/// </summary>
+		/// <param name="value">The instance to clone.</param>
+		object ShallowClone(object value);
 	}
 }
