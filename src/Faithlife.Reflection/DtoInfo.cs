@@ -30,6 +30,48 @@ namespace Faithlife.Reflection
 		/// <param name="type">The DTO type.</param>
 		public static IDtoInfo GetInfo(Type type) => s_infos.GetOrAdd(type ?? throw new ArgumentNullException(nameof(type)), DoGetInfo);
 
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static T CreateNew<T>(this DtoInfo<T> info, params (IDtoProperty<T> Property, object? Value)[] propertyValues) =>
+			info.CreateNew(propertyValues?.AsEnumerable()!);
+
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static T CreateNew<T>(this DtoInfo<T> info, IEnumerable<(string PropertyName, object? Value)> propertyValues) =>
+			info.CreateNew(propertyValues?.Select(x => (info.GetProperty(x.PropertyName), x.Value))!);
+
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static T CreateNew<T>(this DtoInfo<T> info, params (string PropertyName, object? Value)[] propertyValues) =>
+			info.CreateNew(propertyValues?.AsEnumerable()!);
+
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static object CreateNew(this IDtoInfo info, params (IDtoProperty Property, object? Value)[] propertyValues) =>
+			info.CreateNew(propertyValues?.AsEnumerable()!);
+
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static object CreateNew(this IDtoInfo info, IEnumerable<(string PropertyName, object? Value)> propertyValues) =>
+			info.CreateNew(propertyValues?.Select(x => (info.GetProperty(x.PropertyName), x.Value))!);
+
+		/// <summary>
+		/// Calls <c>CreateNew</c> with the specified property values.
+		/// </summary>
+		[return: NotNull]
+		public static object CreateNew(this IDtoInfo info, params (string PropertyName, object? Value)[] propertyValues) =>
+			info.CreateNew(propertyValues?.AsEnumerable()!);
+
 		private static IDtoInfo DoGetInfo(Type type)
 		{
 			try
@@ -104,25 +146,95 @@ namespace Faithlife.Reflection
 		/// <summary>
 		/// Creates a new instance of the DTO.
 		/// </summary>
-		/// <remarks>The DTO must have a public default constructor.</remarks>
 		[return: NotNull]
-		public T CreateNew() => m_lazyCreateNew.Value()!;
+		public T CreateNew() => DoCreateNew(Array.Empty<(IDtoProperty<T>, object?)>());
 
 		/// <summary>
 		/// Clones the specified DTO by copying each property into a new instance.
 		/// </summary>
 		/// <param name="value">The instance to clone.</param>
-		/// <remarks>The DTO must have a public default constructor, and all properties must be read/write.</remarks>
 		[return: NotNull]
 		public T ShallowClone(T value)
 		{
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			var clone = CreateNew();
-			foreach (var property in Properties)
-				property.SetValue(clone, property.GetValue(value));
-			return clone;
+			return CreateNew(Properties.Select(x => (x, x.GetValue(value))));
+		}
+
+		/// <summary>
+		/// Creates a new instance of the DTO.
+		/// </summary>
+		/// <remarks>If possible, the instance is created with the public default constructor, after which the specified
+		/// properties (if any) are set to the specified values. If there is no public default constructor and/or one or more
+		/// of the specified properties are read-only, the instance is created with a public constructor whose parameters
+		/// match the properties of the DTO.</remarks>
+		[return: NotNull]
+		public T CreateNew(IEnumerable<(IDtoProperty<T> Property, object? Value)> propertyValues) =>
+			DoCreateNew(propertyValues is IReadOnlyCollection<(IDtoProperty<T>, object?)> collection ? collection : propertyValues?.ToList()!);
+
+		[return: NotNull]
+		private T DoCreateNew(IReadOnlyCollection<(IDtoProperty<T> Property, object? Value)> propertyValues)
+		{
+			if (propertyValues is null)
+				throw new ArgumentNullException(nameof(propertyValues));
+
+			// find the constructor with the fewest parameters that works with the specified property values
+			foreach (var creator in m_lazyCreators.Value)
+			{
+				if (creator is null)
+				{
+					// use the default constructor if all property values can be set
+					if (propertyValues.Count == 0 || (!m_isValueType && propertyValues.All(x => !x.Property.IsReadOnly)))
+					{
+						var newValue = m_lazyCreateNew.Value()!;
+						foreach (var (property, value) in propertyValues)
+							property.SetValue(newValue, value);
+						return newValue;
+					}
+				}
+				else
+				{
+					var parameters = new object?[creator.Properties.Length];
+
+					// use the default values for the constructor parameters, if any
+					if (creator.DefaultValues != null)
+						Array.Copy(creator.DefaultValues, parameters, parameters.Length);
+
+					var canCreate = true;
+					List<(IDtoProperty<T> Property, object? Value)>? propertyValuesToSet = null;
+
+					foreach (var (property, value) in propertyValues)
+					{
+						if (creator.GetPropertyParameterIndex(property) is int index)
+						{
+							parameters[index] = value;
+						}
+						else if (!m_isValueType && !property.IsReadOnly)
+						{
+							(propertyValuesToSet ??= new List<(IDtoProperty<T> Property, object? Value)>(capacity: propertyValues.Count)).Add((property, value));
+						}
+						else
+						{
+							canCreate = false;
+							break;
+						}
+					}
+
+					if (canCreate)
+					{
+						var newValue = (T) creator.Constructor.Invoke(parameters);
+						if (propertyValuesToSet != null)
+						{
+							foreach (var (property, value) in propertyValuesToSet)
+								property.SetValue(newValue, value);
+						}
+						return newValue;
+					}
+				}
+			}
+
+			throw new InvalidOperationException("No matching constructors found.");
 		}
 
 		IReadOnlyList<IDtoProperty> IDtoInfo.Properties => Properties;
@@ -136,6 +248,21 @@ namespace Faithlife.Reflection
 		object IDtoInfo.ShallowClone(object value) =>
 			ShallowClone(value is T t ? t : throw new ArgumentException($"Value must be of type '{typeof(T).FullName}'.", nameof(value)));
 
+		object IDtoInfo.CreateNew(IEnumerable<(IDtoProperty Property, object? Value)> propertyValues)
+		{
+			return CreateNew(Cast(propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))));
+
+			static IEnumerable<(IDtoProperty<T> Property, object? Value)> Cast(IEnumerable<(IDtoProperty Property, object? Value)> source)
+			{
+				foreach (var (property, value) in source)
+				{
+					if (!(property is IDtoProperty<T> typedProperty))
+						throw new InvalidOperationException($"Property '{property.Name}' must be from type '{typeof(T).FullName}'.");
+					yield return (typedProperty, value);
+				}
+			}
+		}
+
 		internal DtoInfo()
 		{
 			m_lazyCreateNew = new Lazy<Func<T>>(() => Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile());
@@ -146,18 +273,26 @@ namespace Faithlife.Reflection
 			m_lazyPropertiesByName = new Lazy<IReadOnlyDictionary<string, IDtoProperty<T>>>(
 				() => m_lazyProperties.Value.ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase));
 
+			m_lazyCreators = new Lazy<Creator?[]>(
+				() => GetCreators().OrderBy(x => x?.Properties.Length ?? 0).ToArray());
+
+			m_isValueType = typeof(T).IsValueType;
+
 			static bool IsPublicNonStaticProperty(PropertyInfo info) => info.GetMethod != null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
 
 			static bool IsPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
 
-			static IEnumerable<IDtoProperty<T>> GetProperties() =>
-				typeof(T).GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
-					.Concat(typeof(T).GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
+			static IEnumerable<IDtoProperty<T>> GetProperties()
+			{
+				var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+				return type.GetRuntimeProperties().Where(IsPublicNonStaticProperty).Select(CreateDtoProperty)
+					.Concat(type.GetRuntimeFields().Where(IsPublicNonStaticField).Select(CreateDtoProperty));
+			}
 		}
 
 		private static IDtoProperty<T> CreateDtoProperty(PropertyInfo propertyInfo) =>
 			(IDtoProperty<T>) typeof(DtoProperty<,>)
-				.MakeGenericType(propertyInfo.DeclaringType, propertyInfo.PropertyType)
+				.MakeGenericType(typeof(T), propertyInfo.PropertyType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(PropertyInfo) }))
@@ -165,7 +300,7 @@ namespace Faithlife.Reflection
 
 		private static IDtoProperty<T> CreateDtoProperty(FieldInfo fieldInfo) =>
 			(IDtoProperty<T>) typeof(DtoProperty<,>)
-				.MakeGenericType(fieldInfo.DeclaringType, fieldInfo.FieldType)
+				.MakeGenericType(typeof(T), fieldInfo.FieldType)
 				.GetTypeInfo()
 				.DeclaredConstructors
 				.Single(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(FieldInfo) }))
@@ -174,10 +309,72 @@ namespace Faithlife.Reflection
 		private static string GetPropertyName<TValue>(Expression<Func<T, TValue>> getter) =>
 			getter.Body is MemberExpression body ? body.Member.Name : throw new ArgumentException("Invalid getter.", nameof(getter));
 
+		private IEnumerable<Creator?> GetCreators()
+		{
+			foreach (var constructor in (Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T)).GetConstructors())
+			{
+				var parameters = constructor.GetParameters();
+				if (parameters.Length == 0)
+				{
+					// null means default constructor
+					yield return null;
+				}
+				else
+				{
+					var isCreator = true;
+					var properties = new IDtoProperty<T>[parameters.Length];
+					object?[]? defaultValues = null;
+					for (var index = 0; index < parameters.Length; index++)
+					{
+						var parameter = parameters[index];
+						var property = TryGetProperty(parameter.Name);
+						if (property is null)
+						{
+							isCreator = false;
+							break;
+						}
+						properties[index] = property;
+						if (parameter.HasDefaultValue)
+							(defaultValues ??= new object?[parameters.Length])[index] = parameter.DefaultValue;
+					}
+
+					if (isCreator)
+						yield return new Creator(constructor, properties, defaultValues);
+				}
+			}
+		}
+
+		private sealed class Creator
+		{
+			public Creator(ConstructorInfo constructor, IDtoProperty<T>[] properties, object?[]? defaultValues)
+			{
+				Constructor = constructor;
+				Properties = properties;
+				DefaultValues = defaultValues;
+
+				m_propertyIndices = new Dictionary<IDtoProperty<T>, int>();
+				for (var index = 0; index < properties.Length; index++)
+					m_propertyIndices.Add(properties[index], index);
+			}
+
+			public ConstructorInfo Constructor { get; }
+
+			public IDtoProperty<T>[] Properties { get; }
+
+			public object?[]? DefaultValues { get; }
+
+			public int? GetPropertyParameterIndex(IDtoProperty<T> property) =>
+				m_propertyIndices.TryGetValue(property, out var index) ? index : default(int?);
+
+			private readonly Dictionary<IDtoProperty<T>, int> m_propertyIndices;
+		}
+
 		internal static readonly Lazy<DtoInfo<T>> Instance = new Lazy<DtoInfo<T>>(() => new DtoInfo<T>());
 
 		private readonly Lazy<Func<T>> m_lazyCreateNew;
 		private readonly Lazy<IReadOnlyList<IDtoProperty<T>>> m_lazyProperties;
 		private readonly Lazy<IReadOnlyDictionary<string, IDtoProperty<T>>> m_lazyPropertiesByName;
+		private readonly Lazy<Creator?[]> m_lazyCreators;
+		private readonly bool m_isValueType;
 	}
 }

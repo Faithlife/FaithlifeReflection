@@ -1,13 +1,19 @@
 # Release Notes
 
+## 1.1.0
+
+* Support `CreateNew` with property values. Set read-only properties via non-default constructors.
+* Use case-insensitive property name matching.
+* Throw exception on a failed attempt to set a property on a value type.
+
 ## 1.0.1
 
-* [patch] Tuple values can be null.
+* Tuple values can be null.
 
 ## 1.0.0
 
-* [minor] Support nullable reference types.
-* [major] `ShallowClone` now throws on `null`.
+* Support nullable reference types.
+* `ShallowClone` now throws on `null`.
 
 ## 0.2.1
 
