@@ -10,10 +10,6 @@ public object ShallowClone(object value)
 | --- | --- |
 | value | The instance to clone. |
 
-## Remarks
-
-The DTO must have a public default constructor, and all properties must be read/write.
-
 ## See Also
 
 * interface [IDtoInfo](../IDtoInfo.md)

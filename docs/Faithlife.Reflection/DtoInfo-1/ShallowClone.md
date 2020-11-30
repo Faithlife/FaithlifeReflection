@@ -10,10 +10,6 @@ public T ShallowClone(T value)
 | --- | --- |
 | value | The instance to clone. |
 
-## Remarks
-
-The DTO must have a public default constructor, and all properties must be read/write.
-
 ## See Also
 
 * class [DtoInfo&lt;T&gt;](../DtoInfo-1.md)

@@ -1,4 +1,4 @@
-# IDtoInfo.CreateNew method
+# IDtoInfo.CreateNew method (1 of 2)
 
 Creates a new instance of the DTO.
 
@@ -6,12 +6,32 @@ Creates a new instance of the DTO.
 public object CreateNew()
 ```
 
+## See Also
+
+* interface [IDtoInfo](../IDtoInfo.md)
+* namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
+
+---
+
+# IDtoInfo.CreateNew method (2 of 2)
+
+Creates a new instance of the DTO, assigning properties with the specified names to the specified values.
+
+```csharp
+public object CreateNew(IEnumerable<ValueTuple<IDtoProperty, object>> propertyValues)
+```
+
+| parameter | description |
+| --- | --- |
+| propertyValues | The property names and values. |
+
 ## Remarks
 
-The DTO must have a public default constructor.
+If possible, the instance is created with the public default constructor, after which the specified properties (if any) are set to the specified values. If there is no public default constructor and/or one or more of the specified properties are read-only, the instance is created with a public constructor whose parameters match the properties of the DTO.
 
 ## See Also
 
+* interface [IDtoProperty](../IDtoProperty.md)
 * interface [IDtoInfo](../IDtoInfo.md)
 * namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
 

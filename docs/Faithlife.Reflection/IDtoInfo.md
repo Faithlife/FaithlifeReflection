@@ -12,6 +12,7 @@ public interface IDtoInfo
 | --- | --- |
 | [Properties](IDtoInfo/Properties.md) { get; } | The properties of the DTO. |
 | [CreateNew](IDtoInfo/CreateNew.md)() | Creates a new instance of the DTO. |
+| [CreateNew](IDtoInfo/CreateNew.md)(…) | Creates a new instance of the DTO, assigning properties with the specified names to the specified values. |
 | [GetProperty](IDtoInfo/GetProperty.md)(…) | Returns the property of the specified name. |
 | [ShallowClone](IDtoInfo/ShallowClone.md)(…) | Clones the specified DTO by copying each property into a new instance. |
 | [TryGetProperty](IDtoInfo/TryGetProperty.md)(…) | Returns the property of the specified name. |

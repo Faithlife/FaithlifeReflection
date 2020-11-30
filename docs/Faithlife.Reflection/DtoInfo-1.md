@@ -16,6 +16,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 | --- | --- |
 | [Properties](DtoInfo-1/Properties.md) { get; } | The properties of the DTO. |
 | [CreateNew](DtoInfo-1/CreateNew.md)() | Creates a new instance of the DTO. |
+| [CreateNew](DtoInfo-1/CreateNew.md)(…) | Creates a new instance of the DTO. |
 | [GetProperty](DtoInfo-1/GetProperty.md)(…) | Returns the property of the specified name. |
 | [GetProperty&lt;TValue&gt;](DtoInfo-1/GetProperty.md)(…) | Returns the property named by the specified getter. (2 methods) |
 | [ShallowClone](DtoInfo-1/ShallowClone.md)(…) | Clones the specified DTO by copying each property into a new instance. |

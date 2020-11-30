@@ -10,6 +10,8 @@ public static class DtoInfo
 
 | name | description |
 | --- | --- |
+| static [CreateNew](DtoInfo/CreateNew.md)(…) | Calls `CreateNew` with the specified property values. (3 methods) |
+| static [CreateNew&lt;T&gt;](DtoInfo/CreateNew.md)(…) | Calls `CreateNew` with the specified property values. (3 methods) |
 | static [GetInfo](DtoInfo/GetInfo.md)(…) | Gets weakly-typed information about the specified DTO type. |
 | static [GetInfo&lt;T&gt;](DtoInfo/GetInfo.md)() | Gets information about the specified DTO type. |
 
