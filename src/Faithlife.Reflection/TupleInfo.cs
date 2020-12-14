@@ -31,7 +31,7 @@ namespace Faithlife.Reflection
 		/// True if the specified object is a supported tuple.
 		/// </summary>
 		/// <param name="value">The possible tuple.</param>
-		public static bool IsTuple(object? value) => value != null && IsTupleType(value.GetType());
+		public static bool IsTuple(object? value) => value is not null && IsTupleType(value.GetType());
 
 		/// <summary>
 		/// True if the specified type is a supported tuple type.
@@ -40,7 +40,7 @@ namespace Faithlife.Reflection
 		public static bool IsTupleType(Type? type)
 		{
 			var typeName = type?.FullName;
-			return typeName != null &&
+			return typeName is not null &&
 				(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 					typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
 					typeName == "System.ValueTuple" ||
@@ -53,7 +53,7 @@ namespace Faithlife.Reflection
 			{
 				return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 			}
-			catch (TargetInvocationException exception) when (exception.InnerException != null)
+			catch (TargetInvocationException exception) when (exception.InnerException is not null)
 			{
 				ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
 				throw;
@@ -134,7 +134,7 @@ namespace Faithlife.Reflection
 				}
 				if (index != itemCount)
 					throw new ArgumentException("Too few items.");
-				if (restInfo != null)
+				if (restInfo is not null)
 					arguments[7] = restInfo.CreateNew(restItems);
 				return (T) constructor.Invoke(arguments);
 			};

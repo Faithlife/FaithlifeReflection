@@ -78,7 +78,7 @@ namespace Faithlife.Reflection
 			{
 				return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 			}
-			catch (TargetInvocationException exception) when (exception.InnerException != null)
+			catch (TargetInvocationException exception) when (exception.InnerException is not null)
 			{
 				ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
 				throw;
@@ -156,7 +156,7 @@ namespace Faithlife.Reflection
 		[return: NotNull]
 		public T ShallowClone(T value)
 		{
-			if (value == null)
+			if (value is null)
 				throw new ArgumentNullException(nameof(value));
 
 			return CreateNew(Properties.Select(x => (x, x.GetValue(value))));
@@ -198,7 +198,7 @@ namespace Faithlife.Reflection
 					var parameters = new object?[creator.Properties.Length];
 
 					// use the default values for the constructor parameters, if any
-					if (creator.DefaultValues != null)
+					if (creator.DefaultValues is not null)
 						Array.Copy(creator.DefaultValues, parameters, parameters.Length);
 
 					var canCreate = true;
@@ -224,7 +224,7 @@ namespace Faithlife.Reflection
 					if (canCreate)
 					{
 						var newValue = (T) creator.Constructor.Invoke(parameters);
-						if (propertyValuesToSet != null)
+						if (propertyValuesToSet is not null)
 						{
 							foreach (var (property, value) in propertyValuesToSet)
 								property.SetValue(newValue, value);
@@ -278,7 +278,7 @@ namespace Faithlife.Reflection
 
 			m_isValueType = typeof(T).IsValueType;
 
-			static bool IsPublicNonStaticProperty(PropertyInfo info) => info.GetMethod != null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
+			static bool IsPublicNonStaticProperty(PropertyInfo info) => info.GetMethod is not null && info.GetMethod.IsPublic && !info.GetMethod.IsStatic;
 
 			static bool IsPublicNonStaticField(FieldInfo info) => info.IsPublic && !info.IsStatic;
 
