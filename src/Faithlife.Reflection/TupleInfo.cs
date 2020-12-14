@@ -112,7 +112,7 @@ namespace Faithlife.Reflection
 			var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 			var itemCount = ItemTypes.Count;
 			if (itemCount == 0)
-				return items => default!;
+				return _ => default!;
 
 			var genericTypeCount = Math.Min(8, itemCount);
 			var constructor = type.GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == genericTypeCount);
