@@ -35,42 +35,42 @@ namespace Faithlife.Reflection
 		/// </summary>
 		[return: NotNull]
 		public static T CreateNew<T>(this DtoInfo<T> info, params (IDtoProperty<T> Property, object? Value)[] propertyValues) =>
-			info.CreateNew(propertyValues?.AsEnumerable()!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
 		/// <summary>
 		/// Calls <c>CreateNew</c> with the specified property values.
 		/// </summary>
 		[return: NotNull]
 		public static T CreateNew<T>(this DtoInfo<T> info, IEnumerable<(string PropertyName, object? Value)> propertyValues) =>
-			info.CreateNew(propertyValues?.Select(x => (info.GetProperty(x.PropertyName), x.Value))!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).Select(x => (info.GetProperty(x.PropertyName), x.Value)));
 
 		/// <summary>
 		/// Calls <c>CreateNew</c> with the specified property values.
 		/// </summary>
 		[return: NotNull]
 		public static T CreateNew<T>(this DtoInfo<T> info, params (string PropertyName, object? Value)[] propertyValues) =>
-			info.CreateNew(propertyValues?.AsEnumerable()!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
 		/// <summary>
 		/// Calls <c>CreateNew</c> with the specified property values.
 		/// </summary>
 		[return: NotNull]
 		public static object CreateNew(this IDtoInfo info, params (IDtoProperty Property, object? Value)[] propertyValues) =>
-			info.CreateNew(propertyValues?.AsEnumerable()!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
 		/// <summary>
 		/// Calls <c>CreateNew</c> with the specified property values.
 		/// </summary>
 		[return: NotNull]
 		public static object CreateNew(this IDtoInfo info, IEnumerable<(string PropertyName, object? Value)> propertyValues) =>
-			info.CreateNew(propertyValues?.Select(x => (info.GetProperty(x.PropertyName), x.Value))!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).Select(x => (info.GetProperty(x.PropertyName), x.Value)));
 
 		/// <summary>
 		/// Calls <c>CreateNew</c> with the specified property values.
 		/// </summary>
 		[return: NotNull]
 		public static object CreateNew(this IDtoInfo info, params (string PropertyName, object? Value)[] propertyValues) =>
-			info.CreateNew(propertyValues?.AsEnumerable()!);
+			info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
 		private static IDtoInfo DoGetInfo(Type type)
 		{
@@ -171,14 +171,11 @@ namespace Faithlife.Reflection
 		/// match the properties of the DTO.</remarks>
 		[return: NotNull]
 		public T CreateNew(IEnumerable<(IDtoProperty<T> Property, object? Value)> propertyValues) =>
-			DoCreateNew(propertyValues is IReadOnlyCollection<(IDtoProperty<T>, object?)> collection ? collection : propertyValues?.ToList()!);
+			DoCreateNew(propertyValues is IReadOnlyCollection<(IDtoProperty<T>, object?)> collection ? collection : (propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).ToList());
 
 		[return: NotNull]
 		private T DoCreateNew(IReadOnlyCollection<(IDtoProperty<T> Property, object? Value)> propertyValues)
 		{
-			if (propertyValues is null)
-				throw new ArgumentNullException(nameof(propertyValues));
-
 			// find the constructor with the fewest parameters that works with the specified property values
 			foreach (var creator in m_lazyCreators.Value)
 			{
