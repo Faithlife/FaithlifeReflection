@@ -47,7 +47,7 @@ namespace Faithlife.Reflection.Tests
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneProperty));
 
-			OneProperty dto = new OneProperty { Integer = 42 };
+			OneProperty dto = new() { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);
 		}
 
@@ -58,7 +58,7 @@ namespace Faithlife.Reflection.Tests
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneProperty));
 
-			OneProperty dto = new OneProperty { Integer = 42 };
+			OneProperty dto = new() { Integer = 42 };
 			((OneProperty) info.ShallowClone(dto)).Integer.Should().Be(dto.Integer);
 
 			info.GetProperty("Integer").Name.Should().Be("Integer");
@@ -79,7 +79,7 @@ namespace Faithlife.Reflection.Tests
 			property.IsReadOnly.Should().BeFalse();
 			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_Integer");
 
-			OneProperty dto = new OneProperty { Integer = 42 };
+			OneProperty dto = new() { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
 			property.SetValue(dto, 24);
 			dto.Integer.Should().Be(24);
@@ -95,7 +95,7 @@ namespace Faithlife.Reflection.Tests
 			property.IsReadOnly.Should().BeFalse();
 			((PropertyInfo) property.MemberInfo).GetMethod!.Name.Should().Be("get_Integer");
 
-			OneProperty dto = new OneProperty { Integer = 42 };
+			OneProperty dto = new() { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
 			property.SetValue(dto, 24);
 			dto.Integer.Should().Be(24);
@@ -124,7 +124,7 @@ namespace Faithlife.Reflection.Tests
 			info.Properties.Count.Should().Be(1);
 			info.CreateNew().GetType().Should().Be(typeof(OneField));
 
-			OneField dto = new OneField { Integer = 42 };
+			OneField dto = new() { Integer = 42 };
 			info.ShallowClone(dto).Integer.Should().Be(dto.Integer);
 		}
 
@@ -139,7 +139,7 @@ namespace Faithlife.Reflection.Tests
 			property.IsReadOnly.Should().BeFalse();
 			((FieldInfo) property.MemberInfo).Name.Should().Be("Integer");
 
-			OneField dto = new OneField { Integer = 42 };
+			OneField dto = new() { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
 			property.SetValue(dto, 24);
 			dto.Integer.Should().Be(24);
@@ -155,7 +155,7 @@ namespace Faithlife.Reflection.Tests
 			property.IsReadOnly.Should().BeFalse();
 			((FieldInfo) property.MemberInfo).Name.Should().Be("Integer");
 
-			OneField dto = new OneField { Integer = 42 };
+			OneField dto = new() { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
 			property.SetValue(dto, 24);
 			dto.Integer.Should().Be(24);
@@ -171,7 +171,7 @@ namespace Faithlife.Reflection.Tests
 			property.IsReadOnly.Should().BeFalse();
 			((FieldInfo) property.MemberInfo).Name.Should().Be("Integer");
 
-			OneField dto = new OneField { Integer = 42 };
+			OneField dto = new() { Integer = 42 };
 			property.GetValue(dto).Should().Be(dto.Integer);
 			property.SetValue(dto, 24);
 			dto.Integer.Should().Be(24);
@@ -252,7 +252,7 @@ namespace Faithlife.Reflection.Tests
 			info.Properties.Count.Should().Be(2);
 			Invoking(() => info.CreateNew()).Should().Throw<InvalidOperationException>();
 
-			WeirdDto dto = new WeirdDto(1, 2);
+			WeirdDto dto = new(1, 2);
 			Invoking(() => info.ShallowClone(dto)).Should().Throw<InvalidOperationException>();
 
 			var property = info.GetProperty<int>("IntegerProperty");

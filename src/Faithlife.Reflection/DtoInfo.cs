@@ -85,7 +85,7 @@ namespace Faithlife.Reflection
 			}
 		}
 
-		private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new ConcurrentDictionary<Type, IDtoInfo>();
+		private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new();
 		private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 	}
 
@@ -366,7 +366,7 @@ namespace Faithlife.Reflection
 			private readonly Dictionary<IDtoProperty<T>, int> m_propertyIndices;
 		}
 
-		internal static readonly Lazy<DtoInfo<T>> Instance = new Lazy<DtoInfo<T>>(() => new DtoInfo<T>());
+		internal static readonly Lazy<DtoInfo<T>> Instance = new(() => new DtoInfo<T>());
 
 		private readonly Lazy<Func<T>> m_lazyCreateNew;
 		private readonly Lazy<IReadOnlyList<IDtoProperty<T>>> m_lazyProperties;

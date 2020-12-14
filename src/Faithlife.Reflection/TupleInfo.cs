@@ -60,7 +60,7 @@ namespace Faithlife.Reflection
 			}
 		}
 
-		private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new ConcurrentDictionary<Type, ITupleInfo>();
+		private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new();
 		private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 	}
 
@@ -105,7 +105,7 @@ namespace Faithlife.Reflection
 			m_lazyCreator = new Lazy<Func<IEnumerable<object?>, T>>(GetCreator);
 		}
 
-		internal static readonly Lazy<TupleInfo<T>> Instance = new Lazy<TupleInfo<T>>(() => new TupleInfo<T>());
+		internal static readonly Lazy<TupleInfo<T>> Instance = new(() => new TupleInfo<T>());
 
 		private Func<IEnumerable<object?>, T> GetCreator()
 		{
