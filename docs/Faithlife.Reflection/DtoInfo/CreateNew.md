@@ -4,24 +4,7 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static object CreateNew(this IDtoInfo info, 
-    IEnumerable<ValueTuple<string, object>> propertyValues)
-```
-
-## See Also
-
-* interface [IDtoInfo](../IDtoInfo.md)
-* class [DtoInfo](../DtoInfo.md)
-* namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
-
----
-
-# DtoInfo.CreateNew method (2 of 6)
-
-Calls `CreateNew` with the specified property values.
-
-```csharp
-public static object CreateNew(this IDtoInfo info, 
-    params ValueTuple<IDtoProperty, object>[] propertyValues)
+    params (IDtoProperty Property, object? Value)[] propertyValues)
 ```
 
 ## See Also
@@ -33,13 +16,30 @@ public static object CreateNew(this IDtoInfo info,
 
 ---
 
+# DtoInfo.CreateNew method (2 of 6)
+
+Calls `CreateNew` with the specified property values.
+
+```csharp
+public static object CreateNew(this IDtoInfo info, 
+    params (string PropertyName, object? Value)[] propertyValues)
+```
+
+## See Also
+
+* interface [IDtoInfo](../IDtoInfo.md)
+* class [DtoInfo](../DtoInfo.md)
+* namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
+
+---
+
 # DtoInfo.CreateNew method (3 of 6)
 
 Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static object CreateNew(this IDtoInfo info, 
-    params ValueTuple<string, object>[] propertyValues)
+    IEnumerable<(string PropertyName, object? Value)> propertyValues)
 ```
 
 ## See Also
@@ -56,7 +56,7 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    IEnumerable<ValueTuple<string, object>> propertyValues)
+    params (string PropertyName, object? Value)[] propertyValues)
 ```
 
 ## See Also
@@ -73,13 +73,12 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    params ValueTuple<IDtoProperty<T>, object>[] propertyValues)
+    IEnumerable<(string PropertyName, object? Value)> propertyValues)
 ```
 
 ## See Also
 
 * class [DtoInfo&lt;T&gt;](../DtoInfo-1.md)
-* interface [IDtoProperty&lt;T&gt;](../IDtoProperty-1.md)
 * class [DtoInfo](../DtoInfo.md)
 * namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
 
@@ -91,12 +90,13 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    params ValueTuple<string, object>[] propertyValues)
+    params ValueTuple<IDtoProperty<T>, object?>[] propertyValues)
 ```
 
 ## See Also
 
 * class [DtoInfo&lt;T&gt;](../DtoInfo-1.md)
+* interface [IDtoProperty&lt;T&gt;](../IDtoProperty-1.md)
 * class [DtoInfo](../DtoInfo.md)
 * namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
 

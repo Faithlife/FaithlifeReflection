@@ -3,7 +3,7 @@
 True if the specified type is a supported tuple type.
 
 ```csharp
-public static bool IsTupleType(Type type)
+public static bool IsTupleType(Type? type)
 ```
 
 | parameter | description |

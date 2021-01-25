@@ -3,7 +3,7 @@
 True if the specified object is a supported tuple.
 
 ```csharp
-public static bool IsTuple(object value)
+public static bool IsTuple(object? value)
 ```
 
 | parameter | description |

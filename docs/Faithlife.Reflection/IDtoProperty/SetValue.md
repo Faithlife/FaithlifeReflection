@@ -3,7 +3,7 @@
 Sets the value of the property or field for the specified instance of the DTO.
 
 ```csharp
-public void SetValue(object source, object value)
+public void SetValue(object source, object? value)
 ```
 
 | parameter | description |

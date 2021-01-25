@@ -3,7 +3,7 @@
 Returns the property of the specified name.
 
 ```csharp
-public IDtoProperty TryGetProperty(string name)
+public IDtoProperty? TryGetProperty(string name)
 ```
 
 | parameter | description |

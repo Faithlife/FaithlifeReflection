@@ -3,7 +3,7 @@
 Gets the value of the property or field for the specified instance of the DTO.
 
 ```csharp
-public object GetValue(T source)
+public object? GetValue(T source)
 ```
 
 | parameter | description |

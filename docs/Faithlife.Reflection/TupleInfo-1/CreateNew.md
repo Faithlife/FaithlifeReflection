@@ -3,7 +3,7 @@
 Creates a tuple from the specified items.
 
 ```csharp
-public T CreateNew(IEnumerable<object> items)
+public T CreateNew(IEnumerable<object?> items)
 ```
 
 ## See Also

@@ -3,7 +3,7 @@
 Returns the property of the specified name.
 
 ```csharp
-public IDtoProperty<T> TryGetProperty(string name)
+public IDtoProperty<T>? TryGetProperty(string name)
 ```
 
 | parameter | description |
@@ -27,7 +27,7 @@ Returns `null` if the property does not exist.
 Returns the property of the specified name.
 
 ```csharp
-public DtoProperty<T, TValue> TryGetProperty<TValue>(string name)
+public DtoProperty<T, TValue>? TryGetProperty<TValue>(string name)
 ```
 
 | parameter | description |
