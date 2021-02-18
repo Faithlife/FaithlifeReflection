@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "tools\Build\Build.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlDocGen", "tools\XmlDocGen\XmlDocGen.csproj", "{EC2B2484-B209-41A2-94E5-4203A9740983}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "tools\Benchmarks\Benchmarks.csproj", "{04ECA068-ED82-4520-8B4A-6183050B74E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{EC2B2484-B209-41A2-94E5-4203A9740983}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC2B2484-B209-41A2-94E5-4203A9740983}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC2B2484-B209-41A2-94E5-4203A9740983}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04ECA068-ED82-4520-8B4A-6183050B74E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04ECA068-ED82-4520-8B4A-6183050B74E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04ECA068-ED82-4520-8B4A-6183050B74E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04ECA068-ED82-4520-8B4A-6183050B74E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
