@@ -56,12 +56,13 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    params (string PropertyName, object? Value)[] propertyValues)
+    params (IDtoProperty<T> Property, object? Value)[] propertyValues)
 ```
 
 ## See Also
 
 * class [DtoInfo&lt;T&gt;](../DtoInfo-1.md)
+* interface [IDtoProperty&lt;T&gt;](../IDtoProperty-1.md)
 * class [DtoInfo](../DtoInfo.md)
 * namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
 
@@ -73,7 +74,7 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    IEnumerable<(string PropertyName, object? Value)> propertyValues)
+    params (string PropertyName, object? Value)[] propertyValues)
 ```
 
 ## See Also
@@ -90,13 +91,12 @@ Calls `CreateNew` with the specified property values.
 
 ```csharp
 public static T CreateNew<T>(this DtoInfo<T> info, 
-    params ValueTuple<IDtoProperty<T>, object?>[] propertyValues)
+    IEnumerable<(string PropertyName, object? Value)> propertyValues)
 ```
 
 ## See Also
 
 * class [DtoInfo&lt;T&gt;](../DtoInfo-1.md)
-* interface [IDtoProperty&lt;T&gt;](../IDtoProperty-1.md)
 * class [DtoInfo](../DtoInfo.md)
 * namespace [Faithlife.Reflection](../../Faithlife.Reflection.md)
 

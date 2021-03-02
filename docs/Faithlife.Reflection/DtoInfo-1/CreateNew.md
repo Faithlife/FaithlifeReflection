@@ -18,7 +18,7 @@ public T CreateNew()
 Creates a new instance of the DTO.
 
 ```csharp
-public T CreateNew(IEnumerable<ValueTuple<IDtoProperty<T>, object?>> propertyValues)
+public T CreateNew(IEnumerable<(IDtoProperty<T> Property, object? Value)> propertyValues)
 ```
 
 ## Remarks
