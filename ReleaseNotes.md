@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.0
+
+* Add [implicit usings](./src/Faithlife.Reflection/Faithlife.Reflection.props) for consumers.
+
 ## 1.1.0
 
 * Support `CreateNew` with property values. Set read-only properties via non-default constructors.
