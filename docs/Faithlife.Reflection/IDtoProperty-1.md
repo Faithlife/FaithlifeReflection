@@ -23,7 +23,7 @@ Do not implement this interface. Adding members to this interface will not be co
 
 ## See Also
 
-* interface [IDtoProperty](IDtoProperty.md)
+* interface [IDtoProperty](./IDtoProperty.md)
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)
 * [IDtoProperty.cs](https://github.com/Faithlife/FaithlifeReflection/tree/master/src/Faithlife.Reflection/IDtoProperty.cs)
 

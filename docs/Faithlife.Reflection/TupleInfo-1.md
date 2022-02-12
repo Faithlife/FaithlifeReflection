@@ -16,7 +16,7 @@ public sealed class TupleInfo<T> : ITupleInfo
 
 ## See Also
 
-* interface [ITupleInfo](ITupleInfo.md)
+* interface [ITupleInfo](./ITupleInfo.md)
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)
 * [TupleInfo.cs](https://github.com/Faithlife/FaithlifeReflection/tree/master/src/Faithlife.Reflection/TupleInfo.cs)
 

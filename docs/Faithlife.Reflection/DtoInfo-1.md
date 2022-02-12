@@ -25,7 +25,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 
 ## See Also
 
-* interface [IDtoInfo](IDtoInfo.md)
+* interface [IDtoInfo](./IDtoInfo.md)
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)
 * [DtoInfo.cs](https://github.com/Faithlife/FaithlifeReflection/tree/master/src/Faithlife.Reflection/DtoInfo.cs)
 

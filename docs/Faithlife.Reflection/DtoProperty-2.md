@@ -24,7 +24,7 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 
 ## See Also
 
-* interface [IDtoProperty&lt;T&gt;](IDtoProperty-1.md)
+* interface [IDtoProperty&lt;T&gt;](./IDtoProperty-1.md)
 * namespace [Faithlife.Reflection](../Faithlife.Reflection.md)
 * [DtoProperty.cs](https://github.com/Faithlife/FaithlifeReflection/tree/master/src/Faithlife.Reflection/DtoProperty.cs)
 
