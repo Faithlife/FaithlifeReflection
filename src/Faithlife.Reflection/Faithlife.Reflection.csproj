@@ -8,4 +8,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Faithlife.Reflection.props" Pack="true" PackagePath="build" />
+    <None Include="Faithlife.Reflection.props" Pack="true" PackagePath="buildTransitive" />
+  </ItemGroup>
+
 </Project>
