@@ -1,9 +1,8 @@
-namespace Benchmarks
-{
-	public sealed class BenchmarkDto
-	{
-		public long? Id { get; set; }
+namespace Benchmarks;
 
-		public string? Name { get; set; }
-	}
+public sealed class BenchmarkDto
+{
+	public long? Id { get; set; }
+
+	public string? Name { get; set; }
 }
