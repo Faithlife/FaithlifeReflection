@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -35,8 +34,7 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 	/// Gets the value of the property or field for the specified instance of the DTO.
 	/// </summary>
 	/// <param name="source">The DTO instance.</param>
-	[return: MaybeNull]
-	public TValue GetValue(TSource source) =>
+	public TValue? GetValue(TSource source) =>
 		m_lazyGetter.Value(source ?? throw new ArgumentNullException(nameof(source)));
 
 	/// <summary>
@@ -45,7 +43,7 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 	/// <param name="source">The DTO instance.</param>
 	/// <param name="value">The value to which to set the property or field.</param>
 	/// <exception cref="InvalidOperationException">The property or field is read-only, or the DTO is a value type.</exception>
-	public void SetValue(TSource source, [AllowNull] TValue value)
+	public void SetValue(TSource source, TValue? value)
 	{
 		if (IsReadOnly)
 			throw new InvalidOperationException($"'{Name}' of '{typeof(TSource).Name}' is read-only.");

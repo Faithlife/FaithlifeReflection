@@ -51,21 +51,18 @@ public static class DtoInfo
 	/// <summary>
 	/// Calls <c>CreateNew</c> with the specified property values.
 	/// </summary>
-	[return: NotNull]
 	public static object CreateNew(this IDtoInfo info, params (IDtoProperty Property, object? Value)[] propertyValues) =>
 		info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
 	/// <summary>
 	/// Calls <c>CreateNew</c> with the specified property values.
 	/// </summary>
-	[return: NotNull]
 	public static object CreateNew(this IDtoInfo info, IEnumerable<(string PropertyName, object? Value)> propertyValues) =>
 		info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).Select(x => (info.GetProperty(x.PropertyName), x.Value)));
 
 	/// <summary>
 	/// Calls <c>CreateNew</c> with the specified property values.
 	/// </summary>
-	[return: NotNull]
 	public static object CreateNew(this IDtoInfo info, params (string PropertyName, object? Value)[] propertyValues) =>
 		info.CreateNew((propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).AsEnumerable());
 
@@ -200,7 +197,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 
 				foreach (var (property, value) in propertyValues)
 				{
-					if (creator.GetPropertyParameterIndex(property) is int index)
+					if (creator.GetPropertyParameterIndex(property) is { } index)
 					{
 						parameters[index] = value;
 					}
