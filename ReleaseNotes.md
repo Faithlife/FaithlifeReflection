@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.2.2
+
+* Fix repository name in NuGet package.
+* Add .NET 6 target for latest analyzers.
+
 ## 1.2.1
 
 * Add [implicit usings](./src/Faithlife.Reflection/Faithlife.Reflection.props) for consumers.

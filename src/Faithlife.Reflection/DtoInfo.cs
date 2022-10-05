@@ -70,7 +70,7 @@ public static class DtoInfo
 	{
 		try
 		{
-			return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
+			return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>())!;
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -80,7 +80,7 @@ public static class DtoInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
+	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>())!;
 }
 
 /// <summary>
@@ -165,7 +165,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 	/// match the properties of the DTO.</remarks>
 	[return: NotNull]
 	public T CreateNew(IEnumerable<(IDtoProperty<T> Property, object? Value)> propertyValues) =>
-		DoCreateNew(propertyValues is IReadOnlyCollection<(IDtoProperty<T>, object?)> collection ? collection : (propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).ToList());
+		DoCreateNew(propertyValues as IReadOnlyCollection<(IDtoProperty<T>, object?)> ?? (propertyValues ?? throw new ArgumentNullException(nameof(propertyValues))).ToList());
 
 	[return: NotNull]
 	private T DoCreateNew(IReadOnlyCollection<(IDtoProperty<T> Property, object? Value)> propertyValues)
@@ -220,7 +220,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 						foreach (var (property, value) in propertyValuesToSet)
 							property.SetValue(newValue, value);
 					}
-					return newValue;
+					return newValue!;
 				}
 			}
 		}
@@ -318,7 +318,7 @@ public sealed class DtoInfo<T> : IDtoInfo
 				for (var index = 0; index < parameters.Length; index++)
 				{
 					var parameter = parameters[index];
-					var property = TryGetProperty(parameter.Name);
+					var property = parameter.Name is { } name ? TryGetProperty(name) : null;
 					if (property is null)
 					{
 						isCreator = false;
