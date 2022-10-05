@@ -48,7 +48,7 @@ public static class TupleInfo
 	{
 		try
 		{
-			return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
+			return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>())!;
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -58,7 +58,7 @@ public static class TupleInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
+	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>())!;
 }
 
 /// <summary>
