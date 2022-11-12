@@ -84,8 +84,8 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 		ValueType = propertyInfo.PropertyType;
 		IsReadOnly = propertyInfo.SetMethod?.IsPublic != true;
 		MemberInfo = propertyInfo;
-		m_lazyGetter = new Lazy<Func<TSource, TValue>>(GeneratePropertyGetter);
-		m_lazySetter = new Lazy<Action<TSource, TValue>>(GeneratePropertySetter);
+		m_lazyGetter = new Lazy<Func<TSource, TValue?>>(GeneratePropertyGetter);
+		m_lazySetter = new Lazy<Action<TSource, TValue?>>(GeneratePropertySetter);
 	}
 
 	// called by DtoInfo.CreateDtoProperty via reflection
@@ -95,19 +95,19 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 		ValueType = fieldInfo.FieldType;
 		IsReadOnly = fieldInfo.IsInitOnly;
 		MemberInfo = fieldInfo;
-		m_lazyGetter = new Lazy<Func<TSource, TValue>>(GenerateFieldGetter);
-		m_lazySetter = new Lazy<Action<TSource, TValue>>(GenerateFieldSetter);
+		m_lazyGetter = new Lazy<Func<TSource, TValue?>>(GenerateFieldGetter);
+		m_lazySetter = new Lazy<Action<TSource, TValue?>>(GenerateFieldSetter);
 	}
 
-	private Func<TSource, TValue> GeneratePropertyGetter()
+	private Func<TSource, TValue?> GeneratePropertyGetter()
 	{
 		var parameterExpression = Expression.Parameter(typeof(TSource), "value");
 		var propertyValueExpression = Expression.Property(parameterExpression, Name);
 		var expression = propertyValueExpression.Type == typeof(TValue) ? propertyValueExpression : (Expression) Expression.Convert(propertyValueExpression, typeof(TValue));
-		return Expression.Lambda<Func<TSource, TValue>>(expression, parameterExpression).Compile();
+		return Expression.Lambda<Func<TSource, TValue?>>(expression, parameterExpression).Compile();
 	}
 
-	private Action<TSource, TValue> GeneratePropertySetter()
+	private Action<TSource, TValue?> GeneratePropertySetter()
 	{
 		if (typeof(TSource).IsValueType)
 			throw new InvalidOperationException("Properties cannot be set on value types.");
@@ -116,18 +116,18 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 		var parameterExpression = Expression.Parameter(typeof(TValue), Name);
 		var propertyValueExpression = Expression.Property(instanceParameterExpression, Name);
 		var conversionExpression = propertyValueExpression.Type == typeof(TValue) ? parameterExpression : (Expression) Expression.Convert(parameterExpression, propertyValueExpression.Type);
-		return Expression.Lambda<Action<TSource, TValue>>(Expression.Assign(propertyValueExpression, conversionExpression), instanceParameterExpression, parameterExpression).Compile();
+		return Expression.Lambda<Action<TSource, TValue?>>(Expression.Assign(propertyValueExpression, conversionExpression), instanceParameterExpression, parameterExpression).Compile();
 	}
 
-	private Func<TSource, TValue> GenerateFieldGetter()
+	private Func<TSource, TValue?> GenerateFieldGetter()
 	{
 		var parameterExpression = Expression.Parameter(typeof(TSource), "value");
 		var fieldValueExpression = Expression.Field(parameterExpression, Name);
 		var expression = fieldValueExpression.Type == typeof(TValue) ? fieldValueExpression : (Expression) Expression.Convert(fieldValueExpression, typeof(TValue));
-		return Expression.Lambda<Func<TSource, TValue>>(expression, parameterExpression).Compile();
+		return Expression.Lambda<Func<TSource, TValue?>>(expression, parameterExpression).Compile();
 	}
 
-	private Action<TSource, TValue> GenerateFieldSetter()
+	private Action<TSource, TValue?> GenerateFieldSetter()
 	{
 		if (typeof(TSource).IsValueType)
 			throw new InvalidOperationException("Properties cannot be set on value types.");
@@ -136,9 +136,9 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 		var parameterExpression = Expression.Parameter(typeof(TValue), Name);
 		var fieldValueExpression = Expression.Field(instanceParameterExpression, Name);
 		var conversionExpression = fieldValueExpression.Type == typeof(TValue) ? parameterExpression : (Expression) Expression.Convert(parameterExpression, fieldValueExpression.Type);
-		return Expression.Lambda<Action<TSource, TValue>>(Expression.Assign(fieldValueExpression, conversionExpression), instanceParameterExpression, parameterExpression).Compile();
+		return Expression.Lambda<Action<TSource, TValue?>>(Expression.Assign(fieldValueExpression, conversionExpression), instanceParameterExpression, parameterExpression).Compile();
 	}
 
-	private readonly Lazy<Func<TSource, TValue>> m_lazyGetter;
-	private readonly Lazy<Action<TSource, TValue>> m_lazySetter;
+	private readonly Lazy<Func<TSource, TValue?>> m_lazyGetter;
+	private readonly Lazy<Action<TSource, TValue?>> m_lazySetter;
 }
