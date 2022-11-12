@@ -18,8 +18,7 @@
     <Copyright>Copyright $(Authors)</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisLevel>latest-all</AnalysisLevel>
     <IsPackable>false</IsPackable>
     <IsTestProject>false</IsTestProject>
   </PropertyGroup>
@@ -27,6 +26,7 @@
   <PropertyGroup Condition=" '$(BuildNumber)' != '' ">
     <AssemblyVersion>$(VersionPrefix).$(BuildNumber)</AssemblyVersion>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
