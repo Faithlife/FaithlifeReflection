@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.3
+
+* Add .NET 7 target.
+
 ## 1.2.2
 
 * Fix repository name in NuGet package.
