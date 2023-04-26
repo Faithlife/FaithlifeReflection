@@ -175,8 +175,11 @@ public sealed class DtoInfo<T> : IDtoInfo
 		{
 			if (creator is null)
 			{
+				if (propertyValues.Count == 0)
+					return m_lazyCreateNew.Value()!;
+
 				// use the default constructor if all property values can be set
-				if (propertyValues.Count == 0 || (!m_isValueType && propertyValues.All(x => !x.Property.IsReadOnly)))
+				if (!m_isValueType && propertyValues.All(x => !x.Property.IsReadOnly))
 				{
 					var newValue = m_lazyCreateNew.Value()!;
 					foreach (var (property, value) in propertyValues)
