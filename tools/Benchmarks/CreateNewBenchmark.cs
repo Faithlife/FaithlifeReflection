@@ -29,13 +29,15 @@ public class CreateNewBenchmark
 	}
 
 	[Benchmark]
-	public void DtoInfoCreateNew()
+	public void CachedDtoInfoCreateNewAndSet()
 	{
-		m_dto = DtoInfo.GetInfo<BenchmarkDto>().CreateNew(("Id", 1L), ("Name", "one"));
+		m_dto = s_dtoInfo.CreateNew();
+		s_dtoInfo.GetProperty("Id").SetValue(m_dto, 1L);
+		s_dtoInfo.GetProperty("Name").SetValue(m_dto, "one");
 	}
 
 	[Benchmark]
-	public void CachedDtoInfoCreateNew()
+	public void CachedDtoInfoCreateNewWithParams()
 	{
 		m_dto = s_dtoInfo.CreateNew(("Id", 1L), ("Name", "one"));
 	}
