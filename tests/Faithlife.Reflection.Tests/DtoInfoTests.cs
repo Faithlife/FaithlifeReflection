@@ -4,7 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using static FluentAssertions.FluentActions;
 
-#pragma warning disable 414, 649
+#pragma warning disable 414, 628, 649
 
 namespace Faithlife.Reflection.Tests;
 
@@ -360,7 +360,7 @@ public class DtoInfoTests
 		public byte B { get; }
 	}
 
-	private class WeirdDto
+	private sealed class WeirdDto
 	{
 		public WeirdDto(int one, int two)
 		{
