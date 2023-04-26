@@ -61,7 +61,9 @@ public class GetPropertyBenchmark
 	}
 
 	private readonly BenchmarkDto m_dto = new() { Id = 1L, Name = "one" };
+#pragma warning disable IDE0052 // Remove unread private members
 	private string? m_name;
+#pragma warning restore IDE0052 // Remove unread private members
 
 	private static readonly PropertyInfo s_nameProperty = typeof(BenchmarkDto).GetProperty("Name")!;
 	private static readonly DtoInfo<BenchmarkDto> s_dtoInfo = DtoInfo.GetInfo<BenchmarkDto>();

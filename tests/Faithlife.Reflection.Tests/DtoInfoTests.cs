@@ -248,7 +248,7 @@ public class DtoInfoTests
 	{
 		DtoInfo<WeirdDto> info = DtoInfo.GetInfo<WeirdDto>();
 		info.Properties.Count.Should().Be(2);
-		Invoking(() => info.CreateNew()).Should().Throw<InvalidOperationException>();
+		Invoking(info.CreateNew).Should().Throw<InvalidOperationException>();
 
 		WeirdDto dto = new(1, 2);
 		Invoking(() => info.ShallowClone(dto)).Should().Throw<InvalidOperationException>();
@@ -385,7 +385,9 @@ public class DtoInfoTests
 
 		protected int ProtectedProperty { get; } = 6;
 
+#pragma warning disable IDE0051 // Remove unused private members
 		private readonly int m_privateField = 7;
+#pragma warning restore IDE0051 // Remove unused private members
 	}
 
 	private sealed class InitOnlyDto

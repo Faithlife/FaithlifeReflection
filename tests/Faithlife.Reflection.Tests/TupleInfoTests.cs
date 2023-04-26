@@ -94,7 +94,7 @@ public class TupleInfoTests
 	[Test]
 	public void StrongNonTupleType()
 	{
-		Invoking(() => TupleInfo.GetInfo<int>())
+		Invoking(TupleInfo.GetInfo<int>)
 			.Should().Throw<InvalidOperationException>();
 	}
 

@@ -48,7 +48,9 @@ public class CreateEmptyBenchmark
 		m_dto = s_dtoInfo.CreateNew();
 	}
 
+#pragma warning disable IDE0052 // Remove unread private members
 	private BenchmarkDto? m_dto;
+#pragma warning restore IDE0052 // Remove unread private members
 
 	private static readonly DtoInfo<BenchmarkDto> s_dtoInfo = DtoInfo.GetInfo<BenchmarkDto>();
 	private static readonly ConstructorInfo s_constructor = typeof(BenchmarkDto).GetConstructor(Array.Empty<Type>())!;
