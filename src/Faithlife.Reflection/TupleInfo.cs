@@ -37,7 +37,7 @@ public static class TupleInfo
 	public static bool IsTupleType(Type? type)
 	{
 		var typeName = type?.FullName;
-		return typeName is not null &&
+		return type is not null && typeName is not null &&
 			(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
 				typeName == "System.ValueTuple" ||
@@ -48,7 +48,8 @@ public static class TupleInfo
 	{
 		try
 		{
-			return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
+			return s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>()) as ITupleInfo ??
+				throw new InvalidOperationException($"Unable to get tuple info for '{type.FullName}'.");
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -58,7 +59,8 @@ public static class TupleInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
+	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>()) ??
+		throw new MissingMethodException(nameof(TupleInfo), nameof(GetInfo));
 }
 
 /// <summary>
