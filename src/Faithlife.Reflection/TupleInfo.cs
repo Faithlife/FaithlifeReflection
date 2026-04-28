@@ -41,14 +41,14 @@ public static class TupleInfo
 			(typeName.StartsWith("System.ValueTuple`", StringComparison.Ordinal) ||
 				typeName.StartsWith("System.Tuple`", StringComparison.Ordinal) ||
 				typeName == "System.ValueTuple" ||
-				IsTupleType(Nullable.GetUnderlyingType(type!)));
+				IsTupleType(Nullable.GetUnderlyingType(type)));
 	}
 
 	private static ITupleInfo DoGetInfo(Type type)
 	{
 		try
 		{
-			return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>())!;
+			return (ITupleInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -58,7 +58,7 @@ public static class TupleInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, ITupleInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>())!;
+	private static readonly MethodInfo s_getInfo = typeof(TupleInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 }
 
 /// <summary>

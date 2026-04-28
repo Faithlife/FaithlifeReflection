@@ -70,7 +70,7 @@ public static class DtoInfo
 	{
 		try
 		{
-			return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>())!;
+			return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>());
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -80,7 +80,7 @@ public static class DtoInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>())!;
+	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>());
 }
 
 /// <summary>
