@@ -47,7 +47,7 @@ public sealed class DtoProperty<TSource, TValue> : IDtoProperty<TSource>
 	{
 		if (IsReadOnly)
 			throw new InvalidOperationException($"'{Name}' of '{typeof(TSource).Name}' is read-only.");
-		m_lazySetter.Value(source ?? throw new ArgumentNullException(nameof(source)), value!);
+		m_lazySetter.Value(source ?? throw new ArgumentNullException(nameof(source)), value);
 	}
 
 	/// <summary>

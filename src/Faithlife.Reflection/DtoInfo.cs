@@ -70,7 +70,8 @@ public static class DtoInfo
 	{
 		try
 		{
-			return (IDtoInfo) s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>())!;
+			return s_getInfo.MakeGenericMethod(type).Invoke(null, Array.Empty<object>()) as IDtoInfo ??
+				throw new InvalidOperationException($"Unable to get DTO info for '{type.FullName}'.");
 		}
 		catch (TargetInvocationException exception) when (exception.InnerException is not null)
 		{
@@ -80,7 +81,8 @@ public static class DtoInfo
 	}
 
 	private static readonly ConcurrentDictionary<Type, IDtoInfo> s_infos = new();
-	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>())!;
+	private static readonly MethodInfo s_getInfo = typeof(DtoInfo).GetRuntimeMethod("GetInfo", Array.Empty<Type>()) ??
+		throw new MissingMethodException(nameof(DtoInfo), nameof(GetInfo));
 }
 
 /// <summary>
