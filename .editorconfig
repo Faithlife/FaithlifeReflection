@@ -7,11 +7,6 @@ end_of_line = lf
 trim_trailing_whitespace = true
 # END DO NOT EDIT
 
-[*.json]
-resharper_comment_typo_highlighting = none
-resharper_identifier_typo_highlighting = none
-resharper_string_literal_typo_highlighting = none
-
 [dotnet-tools.json]
 insert_final_newline = false
 
@@ -364,3 +359,9 @@ resharper_unused_auto_property_accessor_global_highlighting = none
 resharper_unused_auto_property_accessor_local_highlighting = suggestion
 resharper_unused_member_global_highlighting = none
 resharper_unused_member_local_highlighting = suggestion
+
+# DO NOT EDIT: json convention
+[*.json]
+indent_size = 2
+indent_style = space
+# END DO NOT EDIT
