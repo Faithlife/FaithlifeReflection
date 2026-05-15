@@ -1,5 +1,3 @@
 conventions:
-- path: Faithlife/CodingGuidelines/conventions/repo-conventions-workflow
 - path: Faithlife/CodingGuidelines/conventions/faithlife-csharp-library
 - path: Faithlife/CodingGuidelines/conventions/faithlife-license-mit
-- path: Faithlife/CodingGuidelines/conventions/apm-install
