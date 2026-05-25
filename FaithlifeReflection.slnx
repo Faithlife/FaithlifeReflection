@@ -28,5 +28,4 @@
   <Project Path="tests/Faithlife.Reflection.Tests/Faithlife.Reflection.Tests.csproj" />
   <Project Path="tools/Benchmarks/Benchmarks.csproj" />
   <Project Path="tools/Build/Build.csproj" />
-  <Project Path="tools/XmlDocGen/XmlDocGen.csproj" />
 </Solution>
