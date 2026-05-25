@@ -8,10 +8,6 @@
     <RepositoryName>FaithlifeReflection</RepositoryName>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Nullable" PrivateAssets="All" />
-  </ItemGroup>
-
   <!-- DO NOT EDIT: faithlife-dotnet-library-props convention -->
   <PropertyGroup>
     <LangVersion>14.0</LangVersion>
