@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.4
+
+* Update package README.
+
 ## 1.2.3
 
 * Add .NET 7 target.
