@@ -1,20 +1,6 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".editorconfig" />
-    <File Path=".gitattributes" />
-    <File Path=".github/workflows/build.yaml" />
-    <File Path=".gitignore" />
-    <File Path="build.ps1" />
-    <File Path="Directory.Build.props" />
-    <File Path="dotnet-tools.json" />
-    <File Path="LICENSE" />
-    <File Path="nuget.config" />
-    <File Path="README.md" />
-    <File Path="ReleaseNotes.md" />
-  </Folder>
   <Project Path="src/Faithlife.Reflection/Faithlife.Reflection.csproj" />
   <Project Path="tests/Faithlife.Reflection.Tests/Faithlife.Reflection.Tests.csproj" />
   <Project Path="tools/Benchmarks/Benchmarks.csproj" />
   <Project Path="tools/Build/Build.csproj" />
-  <Project Path="tools/XmlDocGen/XmlDocGen.csproj" />
 </Solution>
