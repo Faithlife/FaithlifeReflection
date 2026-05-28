@@ -6,6 +6,7 @@
     <NoWarn>$(NoWarn);1591;1998;CA1515;CA2263;NU1507;NU5105</NoWarn>
     <GitHubOrganization>Faithlife</GitHubOrganization>
     <RepositoryName>FaithlifeReflection</RepositoryName>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <!-- DO NOT EDIT: dotnet-common-props convention -->
