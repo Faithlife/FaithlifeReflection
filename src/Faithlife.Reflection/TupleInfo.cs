@@ -97,9 +97,9 @@ public sealed class TupleInfo<T> : ITupleInfo
 			throw new InvalidOperationException($"Type is not a tuple: {type.FullName}");
 
 		var genericTypeArguments = (Nullable.GetUnderlyingType(type) ?? type).GenericTypeArguments;
-		ItemTypes = genericTypeArguments.Length < 8 ?
-			new ReadOnlyCollection<Type>(genericTypeArguments) :
-			new ReadOnlyCollection<Type>(genericTypeArguments.Take(7).Concat(TupleInfo.GetInfo(genericTypeArguments[7]).ItemTypes).ToList());
+		ItemTypes = genericTypeArguments.Length < 8
+			? new ReadOnlyCollection<Type>(genericTypeArguments)
+			: new ReadOnlyCollection<Type>(genericTypeArguments.Take(7).Concat(TupleInfo.GetInfo(genericTypeArguments[7]).ItemTypes).ToList());
 
 		m_lazyCreator = new Lazy<Func<IEnumerable<object?>, T>>(GetCreator);
 	}
